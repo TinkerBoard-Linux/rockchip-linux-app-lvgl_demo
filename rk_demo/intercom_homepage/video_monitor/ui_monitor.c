@@ -60,7 +60,7 @@ static RKADK_PLAYER_STATE_E current_state = RKADK_PLAYER_STATE_BUTT;
 static RKADK_PLAYER_STATE_E desired_state = RKADK_PLAYER_STATE_BUTT;
 static pthread_t video_thread;
 static RKADK_BOOL bVideoEnable = true;
-static RKADK_BOOL bAudioEnable = false;
+static RKADK_BOOL bAudioEnable = true;
 static int scale_mode = SCALE_FULL;
 static int video_ofs_x;
 static int video_ofs_y;
@@ -245,7 +245,8 @@ static void rkadk_init(void)
     if (bVideoEnable)
         stPlayCfg.bEnableVideo = true;
     stPlayCfg.stRtspCfg.u32IoTimeout = 3 * 1000 * 1000;
-
+    stPlayCfg.stAudioCfg.pSoundCard = "default";
+    stPlayCfg.stAudioCfg.u32SpeakerVolume = 70;
     stPlayCfg.pfnPlayerCallback = PlayerEventFnTest;
 
     stPlayCfg.stRtspCfg.transport = "udp";
