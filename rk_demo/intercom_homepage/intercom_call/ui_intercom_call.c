@@ -27,7 +27,7 @@ static const char *keyboard_map[] =
     "4", "5", "6", "\n",
     "7", "8", "9", "\n",
     ".", "0", LV_SYMBOL_BACKSPACE, "\n",
-    LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT
+    LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, ""
 };
 
 static const lv_btnmatrix_ctrl_t keyboard_ctrl[] =
