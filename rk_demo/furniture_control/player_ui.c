@@ -385,6 +385,8 @@ void player_list_button_callback(lv_event_t *event)
         printf("del video_list_box\n");
         lv_obj_del(video_list_box);
         video_list_box = NULL;
+        if (play_flag == 0)
+            RK_MPI_VO_SetLayerFlush(-1);
     }
 }
 
