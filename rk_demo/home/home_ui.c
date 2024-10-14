@@ -156,8 +156,8 @@ void bg_pic_snapshot_blur(void)
     area.y1 = 0;
     area.x2 = bg_snapshot->header.w - 1;
     area.y2 = bg_snapshot->header.h - 1;
-    lv_canvas_blur_ver(canvas, &area, 100);
-    lv_canvas_blur_hor(canvas, &area, 100);
+    lv_canvas_blur_ver(canvas, &area, 48);
+    lv_canvas_blur_hor(canvas, &area, 48);
     lv_draw_rect_dsc_init(&dsc);
     dsc.bg_opa = LV_OPA_30;
     dsc.bg_color = lv_color_black();
