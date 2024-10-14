@@ -273,8 +273,6 @@ void home_ui_init(void)
 
 void rk_demo_init(void)
 {
-    lv_obj_t *mask;
-
     scr = lv_obj_create(NULL);
     lv_obj_remove_style_all(scr);
     lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
@@ -283,12 +281,6 @@ void rk_demo_init(void)
     lv_obj_remove_style_all(bg_pic);
     lv_obj_set_size(bg_pic, lv_pct(100), lv_pct(100));
     lv_img_set_src(bg_pic, MAIN_BG_PIC);
-
-    mask = lv_obj_create(bg_pic);
-    lv_obj_remove_style_all(mask);
-    lv_obj_set_size(bg_pic, lv_pct(100), lv_pct(100));
-    lv_obj_set_style_bg_color(bg_pic, lv_color_white(), LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(bg_pic, LV_OPA_40, LV_PART_MAIN);
 
     lv_disp_load_scr(scr);
 
