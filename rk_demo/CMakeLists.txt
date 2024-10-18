@@ -48,7 +48,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if (RK_DEMO_ASR_EN)
-	target_link_libraries(${PROJECT_NAME} aec_bf_process asound)
+	target_link_libraries(${PROJECT_NAME} rkaudio_common rkaudio_vqe asound)
 endif()
 
 if (RK_DEMO_MULTIMEDIA_EN)
@@ -73,5 +73,7 @@ if (NOT DEFINED LVGL_DEMO_RK3506)
 endif()
 if (RK_DEMO_ASR_EN)
 	install(DIRECTORY asr/pcm DESTINATION share/resource)
-	install(FILES asr/lib/libaec_bf_process.so DESTINATION /usr/lib)
+	install(FILES asr/lib/librkaudio_common.so DESTINATION /usr/lib)
+	install(FILES asr/lib/librkaudio_vqe.so DESTINATION /usr/lib)
+	install(FILES asr/config_wakeup.json DESTINATION /usr/vqefiles)
 endif()

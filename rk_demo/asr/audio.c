@@ -210,14 +210,21 @@ static void *docap(void *arg)
         return NULL;
     }
 
+    void *st_ptr = NULL;
+#if 0
     RKAUDIOParam param;
     memset(&param, 0, sizeof(RKAUDIOParam));
     param.model_en = RKAUDIO_EN_BF;
     param.aec_param = rkaudio_aec_param_init();
     param.bf_param = rkaudio_preprocess_param_init();
     param.rx_param = rkaudio_rx_param_init();
-    void *st_ptr = NULL;
+    printf("rkaudio_preprocess_init\n");
     st_ptr = rkaudio_preprocess_init(INPUT_SAMPLE_RATE, INPUT_BITS, 2, 0, &param);
+#else
+    printf("rkaudio_preprocess_init_by_conf\n");
+    st_ptr = rkaudio_preprocess_init_by_conf(INPUT_SAMPLE_RATE, INPUT_BITS, 2, 0,
+             "/usr/vqefiles/config_wakeup.json");
+#endif
 
     short *out = (short *)malloc(IN_SIZE * 2 * sizeof(short));
     int out_size = 0, in_size = 0, res = 0;
