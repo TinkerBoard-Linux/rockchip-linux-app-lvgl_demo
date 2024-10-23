@@ -426,15 +426,6 @@ static void bt_test_state_cb(RkBtRemoteDev *rdev, RK_BT_STATE state)
                 rdev->remote_address_type,
                 rdev->remote_alias);
         break;
-    case RK_BT_STATE_BONDED:
-    case RK_BT_STATE_BOND_NONE:
-        if (rdev != NULL)
-            log("+ %s [%s|%d]:%s:%s\n", rdev->bonded ? "STATE_BONDED" : "STATE_BOND_NONE",
-                rdev->remote_address,
-                rdev->rssi,
-                rdev->remote_address_type,
-                rdev->remote_alias);
-        break;
     case RK_BT_STATE_DEL_DEV_OK:
         if (rdev != NULL)
             log("+ RK_BT_STATE_DEL_DEV_OK: %s:%s:%s\n",
@@ -442,7 +433,6 @@ static void bt_test_state_cb(RkBtRemoteDev *rdev, RK_BT_STATE state)
                 rdev->remote_address_type,
                 rdev->remote_alias);
         break;
-    case RK_BT_STATE_BOND_FAILED:
     case RK_BT_STATE_PAIR_FAILED:
         log("+ STATE_BOND/PAIR FAILED\n");
         break;
@@ -946,6 +936,8 @@ static int bt_ble_init(void)
     //"audio-headset"
     conf.Class = "0x240414";
     create_bt_conf(&conf);
+
+    rk_debug_init(true);
 
     rk_bt_init(&bt_content);
 }

@@ -9,6 +9,7 @@ pid_t rk_gettid(void);
 size_t exec_command(const char *command, char *buffer, size_t buffer_size);
 int exec_command_system(const char *cmd);
 int kill_task(const char *process_name);
+int run_task(char *name, char *cmd);
 
 /**
  * @brief Get the PID of a process using the process name

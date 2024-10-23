@@ -84,21 +84,31 @@ typedef enum
     /* device state */
     RK_BT_STATE_DISCONN_FAILED,
     RK_BT_STATE_DISCONN,
+    RK_BT_STATE_BLE_DISCONN,
     RK_BT_STATE_DISCONN_ALREADY,
     RK_BT_STATE_CONNECT_FAILED,
+    RK_BT_STATE_CONNECT_BLE_FAILED,
     RK_BT_STATE_CONNECT_FAILED_INVAILD_ADDR,
     RK_BT_STATE_CONNECT_FAILED_NO_FOUND_DEVICE,
     RK_BT_STATE_CONNECT_FAILED_SCANNING,
     RK_BT_STATE_CONNECTED_ALREADY,
     RK_BT_STATE_CONNECTED,
+    RK_BT_STATE_SPP_CONNECTED,
+    RK_BT_STATE_SPP_RECV_DATA,
+    RK_BT_STATE_SPP_DISCONNECTED,
+    RK_BT_STATE_BLE_CONNECTED,
     RK_BT_STATE_BOND_NONE,
-    RK_BT_STATE_BOND_FAILED,
     RK_BT_STATE_BONDED,
+    RK_BT_STATE_BLE_BONDED,
     RK_BT_STATE_PAIR_NONE,
+    RK_BT_STATE_BLE_PAIR_NONE,
     RK_BT_STATE_PAIR_FAILED,
-    RK_BT_STATE_PAIRED = 25,
+    RK_BT_STATE_BLE_PAIR_FAILED,
+    RK_BT_STATE_PAIRED,
+    RK_BT_STATE_BLE_PAIRED,
     RK_BT_STATE_DEL_DEV_OK,
     RK_BT_STATE_DEL_DEV_FAILED,
+    RK_BT_STATE_INFO_CHANGE,
 
     /* adapter state */
     RK_BT_STATE_ADAPTER_POWER_ON,
@@ -113,6 +123,7 @@ typedef enum
     RK_BT_STATE_ADAPTER_BLE_ADV_START,
     RK_BT_STATE_ADAPTER_BLE_ADV_STOP,
     RK_BT_STATE_ADAPTER_BLE_ADV_ERR,
+    RK_BT_STATE_ADAPTER_LOCAL_NAME,
 
     /* common cmd resp */
     RK_BT_STATE_COMMAND_RESP_ERR,
@@ -139,6 +150,7 @@ typedef enum
     RK_BT_STATE_SRC_ADD,
     RK_BT_STATE_SRC_DEL,
 
+    RK_BT_STATE_ANCS
     /* profile state */
 } RK_BT_STATE;
 
@@ -150,6 +162,7 @@ typedef enum
     RK_BLE_GATT_CLIENT_READ_BY_LOCAL_ERR,
     RK_BLE_GATT_CLIENT_WRITE_RESP_BY_LOCAL,
     RK_BLE_GATT_CLIENT_WRITE_RESP_BY_LOCAL_ERR,
+    RK_BLE_GATT_CLIENT_ANCS,
     /* call gatt_client_notify(UUID, enable) API
      * event:
      * iface: org.bluez.GattCharacteristic1,
@@ -228,7 +241,37 @@ typedef struct
     /** characteristic cnt */
     uint8_t chr_cnt;
 } RkBleGattService;
+#define RK_DEV_DISCONN_UNKNOWN              0x00
+#define RK_DEV_DISCONN_TIMEOUT              0x01
+#define RK_DEV_DISCONN_LOCAL_HOST           0x02
+#define RK_DEV_DISCONN_REMOTE               0x03
+#define RK_DEV_DISCONN_AUTH_FAILURE         0x04
+#define RK_DEV_DISCONN_LOCAL_HOST_SUSPEND   0x05
 
+static char *DIS_REASON_ID[] =
+{
+    "UNKNOW",
+    "TIMEOUT",
+    "LOCAL_HOST",
+    "REMOTE",
+    "AUTH_FAILURE",
+    "LOCAL_HOST_SUSPEND",
+};
+/* ANCS event description */
+typedef struct
+{
+    uint32_t    *padding;
+    uint32_t    notification_uid;
+    uint8_t     command;
+    uint8_t     flags;
+    uint8_t     category;
+    uint8_t     categoryCnt;
+    uint8_t     appid[128];
+    uint8_t     title[20];
+    uint8_t     message[255];
+    uint8_t     positive_action_label[32];
+    uint8_t     negative_action_label[32];
+} rANCS_EVENT;
 struct bt_conf
 {
     /* Restricts all controllers to the specified transport. Default value
@@ -240,8 +283,20 @@ struct bt_conf
     //ref: static const char *class_to_icon(uint32_t class)
     const char *Class;
 
-    //simple secure paired
+    /* simple secure paired */
     const char *ssp;
+    /*
+     * # Default Secure Connections setting.
+     * # Enables the Secure Connections setting for adapters that support it. It
+     * # provides better crypto algorithms for BT links and also enables CTKD (cross
+     * # transport key derivation) during pairing on any link.
+     * # Possible values: "off", "on", "only"
+     * # - "off": Secure Connections are disabled
+     * # - "on": Secure Connections are enabled when peer device supports them
+     * # - "only": we allow only Secure Connections
+     * # Defaults to "on"
+     */
+    const char *SecureConnections;
 
     //gap name
     const char *BleName;
@@ -258,6 +313,25 @@ struct bt_conf
      * Defaults to "never"
      */
     const char *JustWorksRepairing;
+    /*
+     * # This enables the GATT client functionally, so it can be disabled in system
+     * # which can only operate as a peripheral.
+     * # Defaults to 'true'.
+     */
+    const char *gatt_client;
+
+    /*
+     * # GATT attribute cache.
+     * # Possible values:
+     * # always: Always cache attributes even for devices not paired, this is
+     * # recommended as it is best for interoperability, with more consistent
+     * # reconnection times and enables proper tracking of notifications for all
+     * # devices.
+     * # yes: Only cache attributes of paired devices.
+     * # no: Never cache attributes
+     * # Default: always
+     */
+    const char *gatt_client_cache;
 };
 
 /*
@@ -431,6 +505,8 @@ typedef struct
 
     /* preset pincode without ssp */
     const char *pincode;
+    /* auth callback */
+    void (*cb_auth_func)(uint8_t *confirm, uint32_t *code);
 #define IO_CAPABILITY_DISPLAYONLY       0x00
 #define IO_CAPABILITY_DISPLAYYESNO      0x01
 #define IO_CAPABILITY_KEYBOARDONLY      0x02
@@ -524,6 +600,58 @@ typedef struct remote_dev
 
     char modalias[64 + 1];
 
+    /* disconnected info
+     *---- HCI Error Codes ----
+     * HCI_ERROR_UNKNOWN_CONN_ID        0x02    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_AUTH_FAILURE           0x05    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_PIN_OR_KEY_MISSING     0x06    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_MEMORY_EXCEEDED        0x07    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_CONNECTION_TIMEOUT     0x08    RK_DEV_DISCONN_TIMEOUT
+     * HCI_ERROR_REJ_LIMITED_RESOURCES  0x0d    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_REJ_BAD_ADDR           0x0f    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_INVALID_PARAMETERS     0x12    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_REMOTE_USER_TERM       0x13    RK_DEV_DISCONN_REMOTE
+     * HCI_ERROR_REMOTE_LOW_RESOURCES   0x14    RK_DEV_DISCONN_REMOTE
+     * HCI_ERROR_REMOTE_POWER_OFF       0x15    RK_DEV_DISCONN_REMOTE
+     * HCI_ERROR_LOCAL_HOST_TERM        0x16    RK_DEV_DISCONN_LOCAL_HOST
+     * HCI_ERROR_PAIRING_NOT_ALLOWED    0x18    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_INVALID_LL_PARAMS      0x1e    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_UNSPECIFIED            0x1f    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_ADVERTISING_TIMEOUT    0x3c    RK_DEV_DISCONN_UNKNOWN
+     * HCI_ERROR_CANCELLED_BY_HOST      0x44    RK_DEV_DISCONN_UNKNOWN
+     *
+     * MGMT
+     * MGMT_STATUS_NO_RESOURCES         0x07
+     * MGMT_STATUS_SUCCESS              0x00
+     * MGMT_STATUS_UNKNOWN_COMMAND      0x01
+     * MGMT_STATUS_NOT_CONNECTED        0x02
+     * MGMT_STATUS_FAILED               0x03
+     * MGMT_STATUS_CONNECT_FAILED       0x04
+     * MGMT_STATUS_AUTH_FAILED          0x05
+     * MGMT_STATUS_NOT_PAIRED           0x06
+     * MGMT_STATUS_NO_RESOURCES         0x07
+     * MGMT_STATUS_TIMEOUT              0x08
+     * MGMT_STATUS_ALREADY_CONNECTED    0x09
+     * MGMT_STATUS_BUSY                 0x0a
+     * MGMT_STATUS_REJECTED             0x0b
+     * MGMT_STATUS_NOT_SUPPORTED        0x0c
+     * MGMT_STATUS_INVALID_PARAMS       0x0d
+     * MGMT_STATUS_DISCONNECTED         0x0e
+     * MGMT_STATUS_NOT_POWERED          0x0f
+     * MGMT_STATUS_CANCELLED            0x10
+     * MGMT_STATUS_INVALID_INDEX        0x11
+     * MGMT_STATUS_RFKILLED             0x12
+     * MGMT_STATUS_ALREADY_PAIRED       0x13
+     * MGMT_STATUS_PERMISSION_DENIED    0x14
+     */
+#define RK_DEV_DISCONN_UNKNOWN              0x00
+#define RK_DEV_DISCONN_TIMEOUT              0x01
+#define RK_DEV_DISCONN_LOCAL_HOST           0x02
+#define RK_DEV_DISCONN_REMOTE               0x03
+#define RK_DEV_DISCONN_AUTH_FAILURE         0x04
+#define RK_DEV_DISCONN_LOCAL_HOST_SUSPEND   0x05
+    uint8_t discon_reason;
+    uint8_t discon_addr_type;
     /** The ATT MTU */
     uint16_t att_mtu;
     //for notify/indicate
@@ -551,17 +679,38 @@ typedef struct remote_dev
     //remote dev path: /org/bluez/hci0/dev_F8_7D_76_F2_12_F3
     char dev_path[37 + 1];
 
-    //base state
-    volatile bool connected;
-    volatile bool paired;
-    volatile bool bonded;
-    //bool trusted;
+    volatile bool connected;    //deprecated
+    volatile bool paired;       //deprecated
+    volatile bool bonded;       //deprecated
+    volatile bool svc_refreshed;
+
+    //bredr (A2DP/HFP/SPP/PBAP)
+    volatile bool br_connected;
+    volatile bool br_paired;
+    volatile bool br_bonded;
+
+    //ble (GATT/ATT/ANCS)
+    volatile bool ble_connected;
+    volatile bool ble_paired;
+    volatile bool ble_bonded;
     volatile bool blocked;
     volatile bool auto_connect;
 
     volatile bool disable_auto_connect;
     volatile bool general_connect;
 
+    volatile bool duplicate;
+    /*
+     * bredr_state.paired           (1 << 0)
+     * bredr_state.connected        (1 << 1)
+     * bredr_state.bonded           (1 << 2)
+     * bredr_state.svc_resolved     (1 << 3)
+     * ble_state.paired             (1 << 8)
+     * ble_state.connected          (1 << 9)
+     * ble_state.bonded             (1 << 10)
+     * ble_state.svc_resolved       (1 << 11)
+     */
+    volatile uint16_t info;
     //avrcp
     RK_BT_STATE player_state;
     unsigned int player_position;
@@ -662,7 +811,7 @@ void rk_bt_set_discoverable(bool enable);
  * @retval -1 Error code
  * @see  NULL
  */
-void rk_bt_set_loacal_name(char *name);
+void rk_bt_set_local_name(char *name);
 /**
  * @ingroup  rk_bt_basic
  * @brief  rk_bt_is_powered_on
@@ -775,7 +924,8 @@ int bt_get_dev_info(struct remote_dev *pdev, char *t_addr);
  * @retval -1 Error code
  * @see  NULL
  */
-int rk_bt_connect_by_addr(char *address);
+int rk_bt_connect_by_addr(char *addr, char *addr_type);
+int rk_bt_connect_spp_by_addr(char *addr);
 
 /**
  * @ingroup  rk_bt_basic
@@ -791,7 +941,7 @@ int rk_bt_connect_by_addr(char *address);
  * @retval -1 Error code
  * @see  NULL
  */
-int rk_bt_disconnect_by_addr(char *address);
+int rk_bt_disconnect_by_addr(char *addr, char *addr_type);
 
 //TODO void rk_bt_adapter_info(char *data);
 
@@ -888,7 +1038,7 @@ int rk_bt_pair_by_addr(char *addr);
  * @retval -1 Error code
  * @see  NULL
  */
-int rk_bt_unpair_by_addr(char *addr);
+int rk_bt_unpair_by_addr(char *addr, char *addr_type);
 
 //RK_BT_DEV_PLATFORM_TYPE rk_bt_get_dev_platform(char *addr);
 //for bsa, bluez don't support
@@ -982,6 +1132,8 @@ void rk_bt_rfcomm_send(char *line);
  * @return An integer value. 0 if the connection was successfully initiated.
  */
 int rk_adapter_connect(const char *addr, const char *ble_addrtype);
+
+void rk_debug_init(bool value);
 
 #ifdef __cplusplus
 }
