@@ -21,8 +21,6 @@
 #include <sched.h>
 #include <pthread.h>
 
-#include "hal_sdl.h"
-#include "hal_drm.h"
 #include "main.h"
 #include "ml_label.h"
 #include "soc.h"
@@ -87,9 +85,6 @@ lv_obj_t *label_jitter_val;
 static struct axis_ui axiss[2];
 static struct axis_ui *position_ctrl_target = NULL;
 
-static int g_indev_rotation = 90;
-static int g_disp_rotation = LV_DISP_ROT_90;
-
 static int quit = 0;
 static char *compatible_name;
 static char *soc_name;
@@ -140,11 +135,6 @@ static void sigterm_handler(int sig)
     quit = 1;
 }
 
-int app_disp_rotation(void)
-{
-    return g_disp_rotation;
-}
-
 static void font_init(void)
 {
     lv_freetype_init(64, 1, 0);
@@ -162,23 +152,7 @@ static void font_init(void)
 
 static void lvgl_init(void)
 {
-    lv_init();
-
-#if USE_SDL_GPU
-    hal_sdl_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_DRM
-    hal_drm_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_RKADK
-    hal_rkadk_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_EVDEV
-    lv_port_indev_init(g_indev_rotation);
-#endif
+    lv_port_init();
 
     ui_scaler = ui_scaler_new(1920, 1080);
     ui_scaler_set_refer_size(ui_scaler, LV_HOR_RES, LV_VER_RES);
@@ -189,7 +163,8 @@ static int motor_init(void)
 {
 #if ENABLE_MOTOR_CONTROL
     int ret;
-    ret = MADHT1505BA1_master_init(7); //This place is the binding thread of the motor
+    /* This place is the binding thread of the motor */
+    ret = MADHT1505BA1_master_init(7);
     if (ret == -1)
     {
         printf("MADHT1505BA1_master_init is err\n");

@@ -18,23 +18,14 @@
 #include <lvgl/lv_conf.h>
 
 #include "main.h"
-#include "hal_sdl.h"
-#include "hal_drm.h"
-
-static int g_indev_rotation = 0;
-static int g_disp_rotation = LV_DISP_ROT_NONE;
 
 static int quit = 0;
 
-#if LV_USE_DEMO_WIDGETS
+#if USE_DEMO_WIDGETS
 extern void lv_demo_widgets(void);
-#elif LV_USE_DEMO_KEYPAD_AND_ENCODER
-extern void lv_demo_keypad_encoder(void);
-#elif LV_USE_DEMO_BENCHMARK
+#elif USE_DEMO_BENCHMARK
 extern void lv_demo_benchmark(void);
-#elif LV_USE_DEMO_STRESS
-extern void lv_demo_stress(void);
-#elif LV_USE_DEMO_MUSIC
+#elif USE_DEMO_MUSIC
 extern void lv_demo_music(void);
 #endif
 
@@ -44,79 +35,22 @@ static void sigterm_handler(int sig)
     quit = 1;
 }
 
-int app_disp_rotation(void)
-{
-    return g_disp_rotation;
-}
-
-static void lvgl_init(void)
-{
-    lv_init();
-
-#ifdef USE_SDL_GPU
-    hal_sdl_init(0, 0, g_disp_rotation);
-#else
-    hal_drm_init(0, 0, g_disp_rotation);
-    lv_port_indev_init(g_indev_rotation);
-#endif
-}
-
 int main(int argc, char **argv)
 {
-#define FPS     0
-#if FPS
-    float maxfps = 0.0, minfps = 1000.0;
-    float fps;
-    float fps0 = 0, fps1 = 0;
-    uint32_t st, et;
-    uint32_t st0 = 0, et0;
-#endif
     signal(SIGINT, sigterm_handler);
-    lvgl_init();
+    lv_port_init();
 
-#if LV_USE_DEMO_WIDGETS
+#if USE_DEMO_WIDGETS
     lv_demo_widgets();
-#elif LV_USE_DEMO_KEYPAD_AND_ENCODER
-    lv_demo_keypad_encoder();
-#elif LV_USE_DEMO_BENCHMARK
+#elif USE_DEMO_BENCHMARK
     lv_demo_benchmark();
-#elif LV_USE_DEMO_STRESS
-    lv_demo_stress();
-#elif LV_USE_DEMO_MUSIC
+#elif USE_DEMO_MUSIC
     lv_demo_music();
 #endif
 
     while (!quit)
     {
-#if FPS
-        st = clock_ms();
-#endif
         lv_task_handler();
-#if FPS
-        et = clock_ms();
-        fps = 1000 / (et - st);
-        if (fps != 0.0 && fps < minfps)
-        {
-            minfps = fps;
-            printf("Update minfps %f\n", minfps);
-        }
-        if (fps < 60 && fps > maxfps)
-        {
-            maxfps = fps;
-            printf("Update maxfps %f\n", maxfps);
-        }
-        if (fps > 0.0 && fps < 60)
-        {
-            fps0 = (fps0 + fps) / 2;
-            fps1 = (fps0 + fps1) / 2;
-        }
-        et0 = clock_ms();
-        if ((et0 - st0) > 1000)
-        {
-            printf("avg:%f\n", fps1);
-            st0 = et0;
-        }
-#endif
         usleep(100);
     }
 

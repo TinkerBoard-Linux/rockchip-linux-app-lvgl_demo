@@ -18,11 +18,6 @@
 #include <lvgl/lv_conf.h>
 
 #include "main.h"
-#include "hal_sdl.h"
-#include "hal_drm.h"
-
-static int g_indev_rotation = 0;
-static int g_disp_rotation = LV_DISP_ROT_90;
 
 static int quit = 0;
 
@@ -34,27 +29,10 @@ static void sigterm_handler(int sig)
     quit = 1;
 }
 
-int app_disp_rotation(void)
-{
-    return g_disp_rotation;
-}
-
-static void lvgl_init(void)
-{
-    lv_init();
-
-#ifdef USE_SDL_GPU
-    hal_sdl_init(0, 0, g_disp_rotation);
-#else
-    hal_drm_init(0, 0, g_disp_rotation);
-    lv_port_indev_init(g_indev_rotation);
-#endif
-}
-
 int main(int argc, char **argv)
 {
     signal(SIGINT, sigterm_handler);
-    lvgl_init();
+    lv_port_init();
 
     monitor();
 

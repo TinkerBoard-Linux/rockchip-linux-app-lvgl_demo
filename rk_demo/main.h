@@ -15,7 +15,7 @@
 #include <lvgl/lvgl.h>
 
 #include "home_ui.h"
-#include "lv_port_indev.h"
+#include "lv_port_init.h"
 #include "ui_btnmatrix.h"
 #include "ui_common.h"
 #include "ui_resource.h"
@@ -50,7 +50,6 @@ extern lv_dir_t scr_dir;
 extern lv_coord_t scr_w;
 extern lv_coord_t scr_h;
 
-int app_disp_rotation(void);
 void backlight_set_timeout(int timeout);
 
 #endif

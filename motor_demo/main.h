@@ -24,7 +24,7 @@
 
 #include <lvgl/lvgl.h>
 
-#include "lv_port_indev.h"
+#include "lv_port_init.h"
 #include "timestamp.h"
 
 #define ENABLE_MOTOR_CONTROL            0
@@ -65,7 +65,6 @@ extern lv_obj_t *label_jitter;
 extern lv_ft_info_t ttf_main;
 extern lv_ft_info_t ttf_main_s;
 
-int app_disp_rotation(void);
 void motor_start(void *s, int speed);
 void motor_stop(void *s);
 int motor_check(void *s);

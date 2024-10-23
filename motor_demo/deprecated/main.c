@@ -21,8 +21,6 @@
 #include <sched.h>
 #include <pthread.h>
 
-#include "hal_sdl.h"
-#include "hal_drm.h"
 #include "main.h"
 
 #if ENABLE_MOTOR_CONTROL
@@ -90,11 +88,6 @@ static void sigterm_handler(int sig)
     quit = 1;
 }
 
-int app_disp_rotation(void)
-{
-    return g_disp_rotation;
-}
-
 static void font_init(void)
 {
     lv_freetype_init(64, 1, 0);
@@ -112,13 +105,7 @@ static void font_init(void)
 
 static void lvgl_init(void)
 {
-    lv_init();
-#ifdef USE_SDL_GPU
-    hal_sdl_init(0, 0, g_disp_rotation);
-#else
-    hal_drm_init(0, 0, g_disp_rotation);
-    lv_port_indev_init(g_indev_rotation);
-#endif
+    lv_port_init();
 
     font_init();
 }

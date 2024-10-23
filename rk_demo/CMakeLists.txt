@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.8)
 
 project(rk_demo)
 
+if (LVGL_V9)
+	MESSAGE(FATAL_ERROR "This app no support LVGL9, please switch to LVGL8")
+endif()
+
 add_definitions(-DMULTIMEDIA_EN=${RK_DEMO_MULTIMEDIA_EN})
 add_definitions(-DUSE_SENSOR=${RK_DEMO_SENSOR_EN})
 add_definitions(-DASR_EN=${RK_DEMO_ASR_EN})
@@ -43,9 +47,7 @@ endif()
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
-target_link_libraries(${PROJECT_NAME}
-	lvgl pthread m lv_drivers freetype rkwifibt
-)
+target_link_libraries(${PROJECT_NAME} rkwifibt)
 
 if (RK_DEMO_ASR_EN)
 	target_link_libraries(${PROJECT_NAME} rkaudio_common rkaudio_vqe asound)
@@ -53,16 +55,6 @@ endif()
 
 if (RK_DEMO_MULTIMEDIA_EN)
 	target_link_libraries(${PROJECT_NAME} rockit rkadk)
-endif()
-
-if (LV_DRV_USE_SDL_GPU)
-	target_link_libraries(${PROJECT_NAME} SDL2)
-endif()
-if (LV_DRV_USE_DRM)
-	target_link_libraries(${PROJECT_NAME} drm evdev)
-endif()
-if (LV_DRV_USE_RKADK)
-	target_link_libraries(${PROJECT_NAME} rkadk rga rockit evdev)
 endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)

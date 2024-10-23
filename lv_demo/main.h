@@ -24,36 +24,10 @@
 
 #include <lvgl/lvgl.h>
 
-#include "lv_port_indev.h"
+#include "lv_port_init.h"
 #include "timestamp.h"
 
 #define ALIGN(x, a)     (((x) + (a - 1)) & ~(a - 1))
-#define FAKE_FD         1234
-
-enum
-{
-    SCALE_MODE_FILL = 0x0,  // full screen stretch
-    SCALE_MODE_CONTAIN,     // keep the scale, The side with the larger ratio
-    // is aligned with the container, and the other
-    // side is scaled equally
-    SCALE_MODE_COVER,       // keep the scale, The side with the smaller ratio
-    // is aligned with the container, and the other
-    // side is scaled equally
-    SCALE_MODE_NONE,
-};
-
-#define RK_LV_IMG_DSC_MAGIC     0x6996a55a
-
-typedef struct
-{
-    lv_img_dsc_t img_dsc;
-    uint32_t magic;
-    void (*free)(void *para);
-    void *para;
-    int rot;
-} rk_lv_img_dsc_t;
-
-int app_disp_rotation(void);
 
 #endif
 

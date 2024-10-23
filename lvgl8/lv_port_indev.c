@@ -6,9 +6,11 @@
 /* Copy this file as "lv_port_indev.c" and set this value to "1" to enable conten */
 
 #include <stdlib.h>
-#include "lvgl.h"
-#include "lv_port_indev.h"
+#include <lvgl.h>
+#include <lvgl/lv_conf.h>
+#include <lv_drivers/sdl/sdl_gpu.h>
 
+#include "lv_port_indev.h"
 #include "key.h"
 
 typedef struct _GROUP_NODE
@@ -18,8 +20,9 @@ typedef struct _GROUP_NODE
 } GROUP_NODE;
 
 static int rot_indev;
-lv_indev_t *indev_touchpad;
-lv_indev_t *indev_key;
+static lv_indev_t *indev_touchpad;
+static lv_indev_t *indev_key;
+static lv_indev_t *indev_sdl;
 
 GROUP_NODE *group_list = NULL;
 
@@ -117,6 +120,7 @@ void lv_port_indev_init(int rot)
 
     static lv_indev_drv_t indev_drv;
     static lv_indev_drv_t key_drv;
+    static lv_indev_drv_t sdl_drv;
     lv_disp_t *disp;
 
     rot_indev = rot;
@@ -145,6 +149,13 @@ void lv_port_indev_init(int rot)
         indev_key = lv_indev_drv_register(&key_drv);
         lv_port_indev_group_create();
     }
+#endif
+
+#if USE_SDL
+    lv_indev_drv_init(&sdl_drv);
+    sdl_drv.type = LV_INDEV_TYPE_POINTER;
+    sdl_drv.read_cb = sdl_mouse_read;
+    indev_sdl = lv_indev_drv_register(&sdl_drv);
 #endif
 
 #if USE_SENSOR

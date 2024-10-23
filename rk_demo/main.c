@@ -22,12 +22,8 @@
 
 
 #include "main.h"
-#include "hal_sdl.h"
-#include "hal_drm.h"
 #include "home_ui.h"
 #include "ui_resource.h"
-
-#include "hal_rkadk.h"
 
 #if ROCKIT_EN
 #include "rk_defines.h"
@@ -47,9 +43,6 @@ lv_style_t style_txt_l;
 lv_dir_t scr_dir;
 lv_coord_t scr_w;
 lv_coord_t scr_h;
-
-static int g_indev_rotation = 0;
-static int g_disp_rotation = LV_DISP_ROT_NONE;
 
 static int quit = 0;
 
@@ -78,11 +71,6 @@ static void sigterm_handler(int sig)
 {
     fprintf(stderr, "signal %d\n", sig);
     quit = 1;
-}
-
-int app_disp_rotation(void)
-{
-    return g_disp_rotation;
 }
 
 static void check_scr(void)
@@ -264,23 +252,7 @@ static void psensor_cb(lv_timer_t *timer)
 
 static void lvgl_init(void)
 {
-    lv_init();
-
-#if USE_SDL_GPU
-    hal_sdl_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_DRM
-    hal_drm_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_RKADK
-    hal_rkadk_init(0, 0, g_disp_rotation);
-#endif
-
-#if USE_EVDEV || USE_SENSOR
-    lv_port_indev_init(g_indev_rotation);
-#endif
+    lv_port_init();
 
 #if USE_SENSOR
     lv_indev_drv_t *lsensor, *psensor;
@@ -367,14 +339,6 @@ void app_init(void)
 
 int main(int argc, char **argv)
 {
-#define FPS     0
-#if FPS
-    float maxfps = 0.0, minfps = 1000.0;
-    float fps;
-    float fps0 = 0, fps1 = 0;
-    uint32_t st, et;
-    uint32_t st0 = 0, et0;
-#endif
     signal(SIGINT, sigterm_handler);
 
     struct sched_param param;
@@ -384,7 +348,8 @@ int main(int argc, char **argv)
 
     param.sched_priority = max_priority;
 
-    if (sched_setscheduler(0, SCHED_FIFO, &param) == -1) {
+    if (sched_setscheduler(0, SCHED_FIFO, &param) == -1)
+    {
         perror("sched_setscheduler failed");
     }
 
@@ -403,35 +368,7 @@ int main(int argc, char **argv)
 
     while (!quit)
     {
-#if FPS
-        st = clock_ms();
-#endif
         lv_task_handler();
-#if FPS
-        et = clock_ms();
-        fps = 1000 / (et - st);
-        if (fps != 0.0 && fps < minfps)
-        {
-            minfps = fps;
-            printf("Update minfps %f\n", minfps);
-        }
-        if (fps < 60 && fps > maxfps)
-        {
-            maxfps = fps;
-            printf("Update maxfps %f\n", maxfps);
-        }
-        if (fps > 0.0 && fps < 60)
-        {
-            fps0 = (fps0 + fps) / 2;
-            fps1 = (fps0 + fps1) / 2;
-        }
-        et0 = clock_ms();
-        if ((et0 - st0) > 1000)
-        {
-            printf("avg:%f\n", fps1);
-            st0 = et0;
-        }
-#endif
         usleep(100);
     }
 

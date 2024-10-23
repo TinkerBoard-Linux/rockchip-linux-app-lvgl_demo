@@ -23,13 +23,10 @@
 
 #include <lvgl/lvgl.h>
 
-#include "lv_port_indev.h"
+#include "lv_port_init.h"
 
 #define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
 #define ALIGN(x, a)     (((x) + (a - 1)) & ~(a - 1))
-#define FAKE_FD         1234
-
-int app_disp_rotation(void);
 
 int flexbus_read(int32_t *x, int32_t *y, int32_t count);
 void flexbus_set_rate(int _rate);
