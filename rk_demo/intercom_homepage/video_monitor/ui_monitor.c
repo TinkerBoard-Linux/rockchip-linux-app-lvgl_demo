@@ -244,12 +244,12 @@ static void rkadk_init(void)
         stPlayCfg.bEnableAudio = true;
     if (bVideoEnable)
         stPlayCfg.bEnableVideo = true;
-    stPlayCfg.stRtspCfg.u32IoTimeout = 3 * 1000 * 1000;
+    stPlayCfg.stNetStreamCfg.u32IoTimeout = 3 * 1000 * 1000;
     stPlayCfg.stAudioCfg.pSoundCard = "default";
     stPlayCfg.stAudioCfg.u32SpeakerVolume = 70;
     stPlayCfg.pfnPlayerCallback = PlayerEventFnTest;
 
-    stPlayCfg.stRtspCfg.transport = "udp";
+    stPlayCfg.stNetStreamCfg.transport = "udp";
     stPlayCfg.stVdecCfg.u32FrameBufCnt = 4;
 
     RK_MPI_VO_SetLayerFlush(-1);
