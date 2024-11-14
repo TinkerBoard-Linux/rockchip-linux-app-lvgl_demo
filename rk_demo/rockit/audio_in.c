@@ -17,8 +17,8 @@
 
 #define AUDIO_RATE          AUDIO_SAMPLE_RATE_16000
 #define AUDIO_BITS          AUDIO_BIT_WIDTH_16
-#define AUDIO_CH_CAP        1
-#define AUDIO_CH_REF        1
+#define AUDIO_CH_CAP        2
+#define AUDIO_CH_REF        2
 #define AUDIO_CH            (AUDIO_CH_CAP + AUDIO_CH_REF)
 #define AUDIO_CH_OUT        1
 
@@ -42,6 +42,12 @@ static AUDIO_SOUND_MODE_E sound_mode(int ch)
         return AUDIO_SOUND_MODE_MONO;
     case 2:
         return AUDIO_SOUND_MODE_STEREO;
+    case 4:
+        return AUDIO_SOUND_MODE_4_CHN;
+    case 6:
+        return AUDIO_SOUND_MODE_6_CHN;
+    case 8:
+        return AUDIO_SOUND_MODE_8_CHN;
     default:
         return AUDIO_SOUND_MODE_BUTT;
     }
@@ -65,7 +71,7 @@ int ai_init(void)
     aiAttr.u32FrmNum = AUDIO_PERIOD_CNT;
     aiAttr.u32PtNumPerFrm = 1024;//AUDIO_PERIOD_SZ;
     aiAttr.u32EXFlag = 0;
-    aiAttr.u32ChnCnt = 2;
+    aiAttr.u32ChnCnt = 4;
 
     result = RK_MPI_AI_SetPubAttr(aiDevId, &aiAttr);
     if (result != 0)
@@ -99,6 +105,9 @@ int ai_init(void)
 
     stAiVqeConfig.s32WorkSampleRate = AUDIO_RATE;
     stAiVqeConfig.s32FrameSample = AUDIO_PERIOD_SZ;
+    stAiVqeConfig.s64RefChannelType = 0xc;      // 0b1100
+    stAiVqeConfig.s64RecChannelType = 0x3;      // 0b0011
+    stAiVqeConfig.s64ChannelLayoutType = 0xf;   // 0b1111
     result = RK_MPI_AI_SetVqeAttr(aiDevId, aiVqeChn, 0, 0, &stAiVqeConfig);
     if (result != RK_SUCCESS)
     {
