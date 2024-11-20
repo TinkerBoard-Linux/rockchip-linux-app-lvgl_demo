@@ -190,6 +190,7 @@ static void rkadk_init(void)
     stPlayCfg.bEnableAudio = 1;
     stPlayCfg.stFrmInfo.u32FrmInfoX = 0;
     stPlayCfg.stFrmInfo.u32FrmInfoY = RK_PCT_H(10);
+    stPlayCfg.stFrmInfo.u32DispBufLen = 2;
     stPlayCfg.bEnableBlackBackground = true;
     stPlayCfg.pfnPlayerCallback = PlayerEventFnTest;
     stPlayCfg.stVdecCfg.u32FrameBufCnt = 4;

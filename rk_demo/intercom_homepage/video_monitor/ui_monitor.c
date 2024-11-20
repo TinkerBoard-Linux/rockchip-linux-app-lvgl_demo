@@ -132,6 +132,7 @@ static void param_init(RKADK_PLAYER_FRAME_INFO_S *pstFrmInfo)
     pstFrmInfo->u32DispHeight = video_cont_h;
     pstFrmInfo->u32ImgWidth = video_img_w;
     pstFrmInfo->u32ImgHeight = video_img_h;
+    pstFrmInfo->u32DispBufLen = 2;
 
 #if USE_RK3506
 #if (LV_COLOR_DEPTH == 16)
