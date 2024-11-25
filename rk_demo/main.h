@@ -28,7 +28,6 @@
 #define WIFIBT_EN   0
 #endif
 #define BT_EN       WIFIBT_EN
-#define BT_NAME     "RKBT_AUDIO"
 #ifndef ASR_EN
 #define ASR_EN      0
 #endif

@@ -63,6 +63,7 @@ struct wifibt_cmdarg
 struct bt_info
 {
     RK_BT_STATE bt_state;
+    char bt_name[32];
     bool track_changed;
     bool pos_changed;
     char title[256];

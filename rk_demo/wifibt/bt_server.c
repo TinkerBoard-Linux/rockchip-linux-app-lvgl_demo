@@ -899,6 +899,8 @@ static int bt_ble_init(void)
     snprintf(buf, sizeof(buf), "%s_%s", bt_content.bt_name, bt_id);
     memcpy(bt_content.bt_name, buf, sizeof(bt_content.bt_name));
 
+    memcpy(bt_info.bt_name, bt_content.bt_name, sizeof(bt_info.bt_name));
+
     memset(buf, 38, sizeof(buf));
     snprintf(buf, sizeof(buf), "%s_%s", bt_content.ble_content.ble_name, bt_id);
     memcpy(bt_content.ble_content.ble_name, buf,

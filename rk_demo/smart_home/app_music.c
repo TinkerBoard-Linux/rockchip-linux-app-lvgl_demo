@@ -234,7 +234,8 @@ void app_music_init(lv_obj_t *parent, void *userdata)
     lv_obj_set_width(area_status, lv_pct(100));
 
     obj = lv_label_create(area_status);
-    lv_label_set_text(obj, "蓝牙音乐 "BT_NAME);
+    lv_label_set_text_fmt(obj, "蓝牙音乐 %.*s",
+                          sizeof(new_info.bt_name), new_info.bt_name);
     lv_obj_add_style(obj, &style_txt_s, LV_PART_MAIN);
     lv_obj_set_style_text_color(obj, lv_color_white(), LV_PART_MAIN);
     lv_obj_align(obj, LV_ALIGN_TOP_LEFT, 0, 0);
