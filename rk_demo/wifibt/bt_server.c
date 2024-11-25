@@ -711,8 +711,9 @@ static bool bt_test_vendor_cb(bool enable)
             return false;
         }
 
-        bt_set_local_name();
-        bt_content.bt_name = bt_name;
+        //TODO
+        //bt_set_local_name();
+        //bt_content.bt_name = bt_name;
 
         //start bluetoothd
         //exec_command_system("/usr/libexec/bluetooth/bluetoothd -d -n -P battery,hostname,gap,wiimote -f /data/main.conf &");
@@ -877,10 +878,41 @@ static int bt_ble_init(void)
     memset(&bt_content, 0, sizeof(RkBtContent));
 
     //BREDR CLASS BT NAME
-    bt_content.bt_name = BT_NAME;
+    memset(bt_content.bt_name, 0, sizeof(bt_content.bt_name));
+    strcpy(bt_content.bt_name, "rkbt");
 
     //BLE NAME
-    bt_content.ble_content.ble_name = "RBLE";
+    memset(bt_content.ble_content.ble_name, 0,
+           sizeof(bt_content.ble_content.ble_name));
+    strcpy(bt_content.ble_content.ble_name, "rkble");
+
+    char bt_id[6] = {0};
+    FILE *fp = fopen("/data/bt_id.txt", "r+");
+    if (fp)
+    {
+        fread(bt_id, 1, 6, fp);
+        fclose(fp);
+    }
+    else
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            bt_id[i] = '0' + (rand() % 10);
+        }
+        fp = fopen("/data/bt_id.txt", "w");
+        fwrite(bt_id, 1, 6, fp);
+        fclose(fp);
+    }
+
+    char buf[38];
+    memset(buf, 38, sizeof(buf));
+    snprintf(buf, sizeof(buf), "%s_%s", bt_content.bt_name, bt_id);
+    memcpy(bt_content.bt_name, buf, sizeof(bt_content.bt_name));
+
+    memset(buf, 38, sizeof(buf));
+    snprintf(buf, sizeof(buf), "%s_%s", bt_content.ble_content.ble_name, bt_id);
+    memcpy(bt_content.ble_content.ble_name, buf,
+           sizeof(bt_content.ble_content.ble_name));
 
     //IO CAPABILITY
     bt_content.io_capability = IO_CAPABILITY_DISPLAYYESNO;

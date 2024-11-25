@@ -271,7 +271,7 @@ struct bt_conf
 typedef struct
 {
     /** ble controller name */
-    const char *ble_name;
+    char ble_name[32];
 
     /** standard ble advtertise data */
     /**
@@ -425,7 +425,7 @@ typedef struct
 typedef struct
 {
     /** adapter name for BREDR */
-    const char *bt_name;
+    char bt_name[32];
     /** adapter address for BREDR */
     const char *bt_addr;
 
@@ -543,7 +543,7 @@ typedef struct remote_dev
     volatile bool exist;
 
     //change event/reason
-    char change_name[64];
+    char change_name[128];
 
     //fail reason
     //char fail_reason[64];
