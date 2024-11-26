@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.8)
 
 project(lv_demo)
 
-option(LINK_LVGL_DEMOS "Link lvgl_demos" OFF)
-
 include_directories(${PROJECT_SOURCE_DIR}/./)
 
 if (LVGL_DEMO_WIDGETS)
@@ -20,10 +18,6 @@ endif()
 aux_source_directory(. SRCS)
 
 add_executable(${PROJECT_NAME} ${SRCS})
-
-if (LINK_LVGL_DEMOS)
-	target_link_libraries(${PROJECT_NAME} lvgl_demos)
-endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(PROGRAMS S10lv_demo DESTINATION /etc/init.d)
