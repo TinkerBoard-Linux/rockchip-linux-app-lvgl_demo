@@ -37,14 +37,14 @@ void lv_port_disp_init(lv_coord_t hor_res, lv_coord_t ver_res, int rot)
     drm_disp_drv_init(rot);
 #endif
 
-#if USE_SDL
+#if USE_SDL_GPU
     static lv_disp_drv_t disp_drv;
     monitor_init();
     SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN);
     disp_drv.rotated = lvgl_rot;
     sdl_disp_drv_init(&disp_drv, hor_res, ver_res);
 
-    lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
+    disp = lv_disp_drv_register(&disp_drv);
 #endif
 
 #if USE_RKADK

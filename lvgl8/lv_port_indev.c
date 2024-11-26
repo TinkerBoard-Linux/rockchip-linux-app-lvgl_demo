@@ -151,7 +151,7 @@ void lv_port_indev_init(int rot)
     }
 #endif
 
-#if USE_SDL
+#if USE_SDL_GPU
     lv_indev_drv_init(&sdl_drv);
     sdl_drv.type = LV_INDEV_TYPE_POINTER;
     sdl_drv.read_cb = sdl_mouse_read;
