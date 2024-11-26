@@ -15,11 +15,15 @@
 enum
 {
     SUBMENU_MIN = 0,
-    SUBMENU_WIFI = SUBMENU_MIN,
-    SUBMENU_BT,
-    SUBMENU_WALLPAPER,
+    SUBMENU_WALLPAPER = SUBMENU_MIN,
     SUBMENU_LANGUAGE_DATE,
     SUBMENU_ABOUT,
+#if WIFIBT_EN
+    SUBMENU_WIFI,
+#endif
+#if BT_EN
+    SUBMENU_BT,
+#endif
     SUBMENU_MAX,
 };
 
@@ -58,7 +62,9 @@ static struct submenu_s submenu_desc[SUBMENU_MAX];
 
 static void sliders_draw(lv_obj_t *parent, struct btn_desc *desc);
 static void menu_switch_cb(lv_event_t *e);
+#if WIFIBT_EN
 static void wifi_switch_cb(lv_event_t *e);
+#endif
 #if BT_EN
 static void switch_toggled(lv_event_t *e);
 #endif
@@ -79,8 +85,12 @@ static void submenu_##name##_destroy(void)  \
     }   \
 }
 
+#if WIFIBT_EN
 SUBMENU_COMMON_DEFINE(SUBMENU_WIFI, wifi)
+#endif
+#if BT_EN
 SUBMENU_COMMON_DEFINE(SUBMENU_BT, bt)
+#endif
 SUBMENU_COMMON_DEFINE(SUBMENU_WALLPAPER, wallpaper)
 SUBMENU_COMMON_DEFINE(SUBMENU_LANGUAGE_DATE, language)
 SUBMENU_COMMON_DEFINE(SUBMENU_ABOUT, about)
@@ -307,6 +317,7 @@ static void menu_switch_cb(lv_event_t *e)
     }
 }
 
+#if WIFIBT_EN
 static void wifi_switch_cb(lv_event_t *e)
 {
     if (wifi_init_done())
@@ -322,6 +333,7 @@ static void wifi_switch_cb(lv_event_t *e)
         lv_toast_show(toast);
     }
 }
+#endif
 
 static void btn_return_cb(lv_event_t *e)
 {

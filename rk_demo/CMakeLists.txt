@@ -47,7 +47,9 @@ endif()
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
-target_link_libraries(${PROJECT_NAME} rkwifibt)
+if (RK_DEMO_WIFIBT_EN)
+	target_link_libraries(${PROJECT_NAME} rkwifibt)
+endif()
 
 if (RK_DEMO_ASR_EN)
 	target_link_libraries(${PROJECT_NAME} rkaudio_common rkaudio_vqe asound)
