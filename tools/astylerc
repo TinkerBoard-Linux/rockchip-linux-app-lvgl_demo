@@ -12,7 +12,7 @@
 
 # Formatting Options
 --convert-tabs
---max-code-length=80
+--max-code-length=100
 
 # Other Options
 --suffix=none
