@@ -106,7 +106,7 @@ static void btn_return_cb(lv_event_t *e)
 
 static int is_network_enable(void)
 {
-    int ret = system("ping 114.114.114.114 -c 1 -W 1 > /dev/null");
+    int ret = system("ping www.baidu.com -c 1 -W 1 > /dev/null");
     return !ret;
 }
 
