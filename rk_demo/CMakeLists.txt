@@ -13,6 +13,7 @@ add_definitions(-DWIFIBT_EN=${RK_DEMO_WIFIBT_EN})
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/
+	${PROJECT_SOURCE_DIR}/audio_algorithm/include
 	${PROJECT_SOURCE_DIR}/home
 	${PROJECT_SOURCE_DIR}/furniture_control
 	${PROJECT_SOURCE_DIR}/setting
@@ -28,6 +29,8 @@ include_directories(
 	${CMAKE_SYSROOT}/usr/include/rga/
 	${CMAKE_SYSROOT}/usr/include/rkadk/
 	)
+
+link_directories(${PROJECT_SOURCE_DIR}/audio_algorithm/lib)
 
 aux_source_directory(. SRCS)
 aux_source_directory(./home SRCS)
@@ -67,7 +70,12 @@ if (NOT DEFINED LVGL_DEMO_RK3506)
 endif()
 if (RK_DEMO_ASR_EN)
 	install(DIRECTORY asr/pcm DESTINATION share/resource)
-	install(FILES asr/lib/librkaudio_common.so DESTINATION /usr/lib)
-	install(FILES asr/lib/librkaudio_vqe.so DESTINATION /usr/lib)
-	install(FILES asr/config_wakeup.json DESTINATION /usr/vqefiles)
 endif()
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/audio_algorithm/lib/
+	DESTINATION "lib"
+	FILES_MATCHING PATTERN "*.so"
+)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/audio_algorithm/configs/
+	DESTINATION "vqefiles"
+	FILES_MATCHING PATTERN "*.json"
+)
