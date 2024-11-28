@@ -28,7 +28,10 @@ endif()
 
 if (LV_DRV_USE_RKADK)
 	add_definitions(-DUSE_RKADK=1 -DUSE_EVDEV=1)
-	link_libraries(rkadk rga rockit evdev)
+	link_libraries(rkadk rockit evdev)
+	if(LVGL_DEMO_RK3506)
+		link_libraries(rga)
+	endif()
 endif()
 
 if (LV_DRV_USE_DRM)
