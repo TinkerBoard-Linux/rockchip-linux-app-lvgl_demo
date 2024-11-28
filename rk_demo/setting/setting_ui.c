@@ -97,15 +97,15 @@ SUBMENU_COMMON_DEFINE(SUBMENU_ABOUT, about)
 
 static struct submenu_s submenu_desc[SUBMENU_MAX] =
 {
+    {"锁屏和壁纸",  submenu_wallpaper,  submenu_wallpaper_destroy, NULL},
+    {"语言和日期",  submenu_language,  submenu_language_destroy, NULL},
+    {"关于",        submenu_about,  submenu_about_destroy, NULL},
 #if WIFIBT_EN
     {"WIFI",        submenu_wifi,    submenu_wifi_destroy, NULL},
 #endif
 #if BT_EN
     {"蓝牙",        submenu_bt,      submenu_bt_destroy,   NULL},
 #endif
-    {"锁屏和壁纸",  submenu_wallpaper,  submenu_wallpaper_destroy, NULL},
-    {"语言和日期",  submenu_language,  submenu_language_destroy, NULL},
-    {"关于",        submenu_about,  submenu_about_destroy, NULL}
 };
 
 static struct btn_desc setting_btn[] =
