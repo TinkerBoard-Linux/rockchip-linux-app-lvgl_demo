@@ -551,9 +551,15 @@ static void *evdev_thread(void *arg)
                 if (in.code == BTN_MOUSE || in.code == BTN_TOUCH)
                 {
                     if (in.value == 0)
+                    {
                         evdev_button = LV_INDEV_STATE_REL;
+                        button = LV_INDEV_STATE_REL;
+                    }
                     else if (in.value == 1)
+                    {
                         evdev_button = LV_INDEV_STATE_PR;
+                        button = LV_INDEV_STATE_PR;
+                    }
                 }
                 else if (type == LV_INDEV_TYPE_KEYPAD)
                 {
