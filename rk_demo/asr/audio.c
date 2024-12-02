@@ -192,7 +192,7 @@ static void *doplay(void *arg)
 static void *docap(void *arg)
 {
     snd_pcm_t *handle;
-    int is_wakeup = 0;
+    int wakeup_status = 0;
     int num_wakeup = 0;
     int num_asr = 0;
     short *buf;
@@ -236,10 +236,13 @@ static void *docap(void *arg)
     int cmd_id = 0;
     float asr_score = 0.0f, cmd_score = 0.0f;
     FILE *fd = NULL;
+    char path[128];
+    snprintf(path, sizeof(path), "/tmp/asrin_%d_%d_%d.pcm",
+             INPUT_SAMPLE_RATE, INPUT_BITS, 2);
     while (running)
     {
         if (!fd && (access("/tmp/asrdump", F_OK) == 0))
-            fd = fopen("/tmp/asrin.pcm", "wb+");
+            fd = fopen(path, "wb+");
         if (fd && (access("/tmp/asrdump", F_OK) != 0))
         {
             fclose(fd);
@@ -255,12 +258,15 @@ static void *docap(void *arg)
         if (fd)
             fwrite(in, 2, in_size, fd);
         out_size = rkaudio_preprocess_short(st_ptr, (short *)in, out, in_size,
-                                            &is_wakeup);
-        if (frame_cot == 0 && is_wakeup == 1)
+                                            &wakeup_status);
+        int32_t tmpstatus = (int32_t)wakeup_status;
+        int32_t real_wakeup_status = tmpstatus & 0xfff;
+        if (real_wakeup_status >= 1)
         {
-            frame_cot = 500;// 8s timeout
+            frame_cot = 375;// 6s timeout
             num_wakeup = num_wakeup + 1;
             printf("\nWakeup [%d].\n", num_wakeup);
+            wakeup_status = wakeup_status >> 11 << 11;
             asr_update(0);
         }
         if (frame_cot > 0)
@@ -273,12 +279,11 @@ static void *docap(void *arg)
                 if (frame_cot < 480)
                     asr_update(cmd_id);
                 frame_cot = 500;
-                is_wakeup = 1;
             }
             else if (frame_cot == 0)
             {
                 printf("\nIdle, sleep now\n");
-                is_wakeup = 0;
+                wakeup_status = 0;
                 asr_update(-1);
                 /* clean cmd */
                 rkaudio_preprocess_get_cmd_id(st_ptr, &cmd_score, &cmd_id);

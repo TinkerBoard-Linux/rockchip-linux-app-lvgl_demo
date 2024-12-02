@@ -9,7 +9,7 @@ extern "C" {
 #define NUM_CHANNEL                  8
 #define NUM_REF_CHANNEL              0
 #define NUM_DROP_CHANNEL             0
-#define REF_POSITION                 0
+#define REF_POSITION                 1
 //static short Array[NUM_SRC_CHANNEL] = { 9,7,5,3,2,4,6,8 }
 //static short Array[NUM_CHANNEL] = {2, 3, 0, 1}; //src first, ref second
 //static short Array[NUM_CHANNEL] = { 0, 1, 3, 2 };// , 4, 5 };
@@ -246,8 +246,8 @@ typedef struct RKAudioAESParameter_
 
 typedef struct RKDTDParam_
 {
-    float ksiThd_high;           /* 0…80„60‡90…00†50…50‡30ˆ40†60‹20Š00ˆ40‰00…8 */
-    float ksiThd_low;            /* 0…80„60‡90…00†50…50‡30ˆ40†60‹20Š00ˆ40‰00…8 */
+    float ksiThd_high;           /* ÂµÂ¥Ã‹Â«Â½Â²Ã…ÃÂ¾Ã¶Ã£ÃÃ–Âµ */
+    float ksiThd_low;            /* ÂµÂ¥Ã‹Â«Â½Â²Ã…ÃÂ¾Ã¶Ã£ÃÃ–Âµ */
 
 } RKDTDParam;
 
@@ -258,41 +258,34 @@ typedef struct SKVNLPParameter_
 
 typedef struct RKAGCParam_
 {
-    /* 0ˆ40‡0¡ã0Š3AGC0…50ˆ20‡80‹5 */
+    /* ÃÃ‚Â°Ã¦AGCÂ²ÃŽÃŠÃ½ */
     float
-    attack_time;  /* 0…70„6¡¤0„40‡8¡À0†40Š10„50…10†40…7AGC0ˆ80‹20ˆ60Š30ˆ30‡00†50…80‡9¨´0ˆ4¨¨0ˆ60„90…80‡20‡8¡À0†40Š1 */
+    attack_time;  /* Â´Â¥Â·Â¢ÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´AGCÃ”Ã¶Ã’Ã¦ÃÃ‚Â½ÂµÃ‹Ã¹ÃÃ¨Ã’ÂªÂµÃ„ÃŠÂ±Â¼Ã¤ */
     float
-    release_time; /* 0‡80„8¡¤0‡30‡8¡À0†40Š10„50…10†40…7AGC0ˆ80‹20ˆ60Š30‡70ˆ30‡70‹50‡9¨´0ˆ4¨¨0ˆ60„90…80‡20‡8¡À0†40Š1 */
+    release_time; /* ÃŠÂ©Â·Ã…ÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´AGCÃ”Ã¶Ã’Ã¦Ã‰ÃÃ‰Ã½Ã‹Ã¹ÃÃ¨Ã’ÂªÂµÃ„ÃŠÂ±Â¼Ã¤ */
     float
-    max_gain; /* ¡Á0Š60…7¨®0ˆ80‹20ˆ60Š30„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20ˆ80‹20ˆ60Š30„50…10…80„60ˆ20†30„50†2dB */
+    max_gain; /* Ã—Ã®Â´Ã³Ã”Ã¶Ã’Ã¦Â£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÃ”Ã¶Ã’Ã¦Â£Â¬ÂµÂ¥ÃŽÂ»Â£ÂºdB */
     float
-    max_peak; /* 0†60…2AGC0…70„70†8¨ª0†2¨®0„50…10‡80Š10…60‹20ˆ70Š70ˆ60‹00…80‡2¡Á0Š60…7¨®0‡20‰50†90†70„50…1¡¤0…90ˆ2¡ì0„50†20…80„60ˆ20†30„50†2dB */
+    max_peak; /* Â¾Â­AGCÂ´Â¦Ã€Ã­ÂºÃ³Â£Â¬ÃŠÃ¤Â³Ã¶Ã“Ã¯Ã’Ã´ÂµÃ„Ã—Ã®Â´Ã³Ã„ÃœÃÂ¿Â£Â¬Â·Â¶ÃŽÂ§Â£ÂºÂµÂ¥ÃŽÂ»Â£ÂºdB */
     float
-    fRth0;    /* 0†80„80ˆ90‡30…90ˆ20†5¨¢0‡80‹30‡20‰50†90†7dB0Š00ˆ40‰00…80„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20†70„90‡80†40Š00ˆ40‰00…8 */
-    float              fRk0;     /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
+    fRth0;    /* Ã€Â©Ã•Ã…Â¶ÃŽÂ½Ã¡ÃŠÃ¸Ã„ÃœÃÂ¿dBÃ£ÃÃ–ÂµÂ£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÂ¿ÂªÃŠÂ¼Ã£ÃÃ–Âµ */
+    float              fRk0;     /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
     float
-    fRth1;    /* 0ˆ50†10‡90‹10…90ˆ20‡40Š80‡80†40‡20‰50†90†7dB0Š00ˆ40‰00…80„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20†5¨¢0‡80‹30Š00ˆ40‰00…8 */
+    fRth1;    /* Ã‘Â¹Ã‹ÃµÂ¶ÃŽÃ†Ã°ÃŠÂ¼Ã„ÃœÃÂ¿dBÃ£ÃÃ–ÂµÂ£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÂ½Ã¡ÃŠÃ¸Ã£ÃÃ–Âµ */
 
-    /* 0ˆ20‰70ˆ4¡ì0…50ˆ20‡80‹5 */
-    int
-    fs;                       /* 0‡80‹50†60‰60…50‡70ˆ5¨´0‡00‡8 */
-    int            frmlen;                   /* 0…70„70†8¨ª0‰00„30…6¡è */
+    /* ÃŽÃžÃÂ§Â²ÃŽÃŠÃ½ */
+    int            fs;                       /* ÃŠÃ½Â¾ÃÂ²Ã‰Ã‘Ã¹Ã‚ÃŠ */
+    int            frmlen;                   /* Â´Â¦Ã€Ã­Ã–Â¡Â³Â¤ */
     float
-    attenuate_time; /* 0ˆ80Š50‡7¨´0‡90„60†40‹10‡8¡À0†40Š10„50…10†40…70ˆ80Š50‡7¨´0…90ˆ20ˆ80‹20ˆ60Š30‡90„60†40‹10…80†510‡9¨´0ˆ4¨¨0…80‡20‡8¡À0†40Š1 */
-    float
-    fRth2;                     /* 0ˆ50†10‡90‹10…90ˆ20‡40Š80‡80†40‡20‰50†90†7dB0Š00ˆ40‰00…8 */
-    float
-    fRk1;                      /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
-    float
-    fRk2;                      /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
-    float
-    fLineGainDb;               /* 0ˆ30‰80ˆ40ˆ80…90ˆ20ˆ0¨¢0‡70‹5dB0‡80‹5 */
+    attenuate_time; /* Ã”Ã«Ã‰Ã¹Ã‹Â¥Â¼ÃµÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´Ã”Ã«Ã‰Ã¹Â¶ÃŽÃ”Ã¶Ã’Ã¦Ã‹Â¥Â¼ÃµÂµÂ½1Ã‹Ã¹ÃÃ¨ÂµÃ„ÃŠÂ±Â¼Ã¤ */
+    float          fRth2;                     /* Ã‘Â¹Ã‹ÃµÂ¶ÃŽÃ†Ã°ÃŠÂ¼Ã„ÃœÃÂ¿dBÃ£ÃÃ–Âµ */
+    float          fRk1;                      /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
+    float          fRk2;                      /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
+    float          fLineGainDb;               /* ÃÃŸÃÃ”Â¶ÃŽÃŒÃ¡Ã‰Ã½dBÃŠÃ½ */
     int
     swSmL0;                    /* this misc flag is bitmap, bit0: more_grow_protect bit1: fast_update_gain*/
-    int
-    swSmL1;                    /* 0ˆ30‰80ˆ40ˆ80…90ˆ20‡8¡À0ˆ7¨°0‡40†50†30…10…80Š00‡80‹5 */
-    int
-    swSmL2;                    /* 0ˆ50†10‡90‹10…90ˆ20‡8¡À0ˆ7¨°0‡40†50†30…10…80Š00‡80‹5 */
+    int            swSmL1;                    /* ÃÃŸÃÃ”Â¶ÃŽÃŠÂ±Ã“Ã²Ã†Â½Â»Â¬ÂµÃ£ÃŠÃ½ */
+    int            swSmL2;                    /* Ã‘Â¹Ã‹ÃµÂ¶ÃŽÃŠÂ±Ã“Ã²Ã†Â½Â»Â¬ÂµÃ£ÃŠÃ½ */
 
 } RKAGCParam;
 
@@ -300,19 +293,17 @@ typedef struct RKCNGParam_
 {
     /*CNG Parameter*/
     float
-    fGain;                     /* INT16 Q0 0‡80„80†40ˆ70‡80Š30‡80‡80ˆ80Š50‡7¨´¡¤¨´0…90‡6¡À0‡60†80‹5 */
+    fGain;                     /* INT16 Q0 ÃŠÂ©Â¼Ã“ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Â·Ã¹Â¶ÃˆÂ±ÃˆÃ€Ã½ */
+    float              fMpy;                        /* INT16 Q0 Â°Ã—Ã”Ã«Ã‹Ã¦Â»ÃºÃŠÃ½Ã‰ÃºÂ³Ã‰Â·Ã¹Â¶Ãˆ */
+    float              fSmoothAlpha;              /* ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Ã†Â½Â»Â¬ÃÂµÃŠÃ½ */
     float
-    fMpy;                        /* INT16 Q0 ¡ã¡Á0ˆ80Š50‡90Š30†3¨²0‡80‹50‡7¨²0…60‡7¡¤¨´0…90‡6 */
-    float
-    fSmoothAlpha;              /* 0‡80Š30‡80‡80ˆ80Š50‡7¨´0‡40†50†30…10ˆ30…80‡80‹5 */
-    float
-    fSpeechGain;               /* 0†0¨´0†60‰60ˆ70Š70ˆ60‹00‡20‰50†90†70…90Š60ˆ10‰90‡80„80†40ˆ70‡80Š30‡80‡80ˆ80Š50‡7¨´¡À0‡60†80‹50ˆ80‹20ˆ60Š3 */
+    fSpeechGain;               /* Â¸Ã¹Â¾ÃÃ“Ã¯Ã’Ã´Ã„ÃœÃÂ¿Â¶Ã®ÃÃ¢ÃŠÂ©Â¼Ã“ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Â±ÃˆÃ€Ã½Ã”Ã¶Ã’Ã¦ */
 } RKCNGParam;
 
 typedef struct RKaudioEqParam_
 {
-    int shwParaLen;           // 0‡00‡90…5¡§0‡4¡Â0ˆ30…80‡80‹50†00‹20‡80‹5
-    short pfCoeff[5][13];          // 0‡00‡90…5¡§0‡4¡Â0ˆ30…80‡80‹5
+    int shwParaLen;           // Ã‚Ã‹Â²Â¨Ã†Ã·ÃÂµÃŠÃ½Â¸Ã¶ÃŠÃ½
+    short pfCoeff[5][13];          // Ã‚Ã‹Â²Â¨Ã†Ã·ÃÂµÃŠÃ½
 } RKaudioEqParam;
 
 typedef struct RKHOWLParam_
@@ -321,11 +312,11 @@ typedef struct RKHOWLParam_
 } RKHOWLParam;
 typedef struct RKDOAParam_
 {
-    float rad;//0ˆ30‰80ˆ9¨®2mic0†40Š10†6¨¤0„50…10ˆ80…50ˆ9¨®0ˆ8¨°0ˆ20„9¡ã0Š50†60…90„50†30ˆ9¨®0†90ˆ40…50†30‰0¡ì0…60‰00‰00†00…9¡§0„50…1¡À0‰10ˆ40Š50†0¨´0†60‰60†70‰90…90‹30…9¡§0„5¡§¡À0‡60‡60Š40…60‹20…80‡20ˆ80…50ˆ9¨®0†70‰90ˆ8¨°0‰00†30‰0¡ì0…60‰00ˆ80…50ˆ9¨®0…9¡§0ˆ20†30„30„50„50„8
+    float rad;//ÃÃŸÃ•Ã³2micÂ¼Ã¤Â¾Ã Â£Â¬Ã”Â²Ã•Ã³Ã”Ã²ÃŽÂªÂ°Ã«Â¾Â¶Â£Â»Ã•Ã³ÃÃÂ²Â»Ã–Â§Â³Ã–Ã–Â¸Â¶Â¨Â£Â¬Â±Ã˜ÃÃ«Â¸Ã¹Â¾ÃÂ¿Ã¢Â¶Ã¸Â¶Â¨Â£Â¨Â±ÃˆÃˆÃ§Â³Ã¶ÂµÃ„Ã”Â²Ã•Ã³Â¿Ã¢Ã”Ã²Ã–Â»Ã–Â§Â³Ã–Ã”Â²Ã•Ã³Â¶Â¨ÃŽÂ»Â¡Â£Â£Â©
     short start_freq;
     short end_freq;
-    short lg_num;           //0†00‡10‡80‹50‰00…80ˆ70„70†00‡10ˆ20„90‡30†40‡80‹5
-    short lg_pitch_num;     //only used for circle array, linear array must be 1, 0†00„80ˆ50‹20†50‡50‡7¡§0‡1¨¨0„30„5
+    short lg_num;           //Â¸ÃƒÃŠÃ½Ã–ÂµÃ“Â¦Â¸ÃƒÃŽÂªÃ…Â¼ÃŠÃ½
+    short lg_pitch_num;     //only used for circle array, linear array must be 1, Â¸Â©Ã‘Ã¶Â½Ã‡Ã‰Â¨ÃƒÃ¨Â¡Â£
 } RKDOAParam;
 
 typedef struct RKAinrParam_
@@ -360,22 +351,15 @@ typedef struct RKAinrParam_
 inline static void *rkaudio_delay_param_init()
 {
     /*RKAudioDelayParam* param = (RKAudioDelayParam*)malloc(sizeof(RKAudioDelayParam));*/
-    RKAudioDelayParam *param = (RKAudioDelayParam *)calloc(1,
-                               sizeof(RKAudioDelayParam));
-    param->MaxFrame =
-        32;       /* delay¡Á0Š60…6¡è0†10†80†40‡40‰00„30‡80‹5 */
-    param->LeastDelay =
-        0;      /* delay¡Á0Š60…90ˆ00†10†80†40‡40‰00„30‡80‹5 */
-    param->JumpFrame = 12;      /* 0ˆ00‹30†10‹50‰00„30‡80‹5 */
-    param->DelayOffset = 1;     /* delay offset0‰00„30‡80‹5 */
-    param->MicAmpThr =
-        50;      /* mic0…90‡9¡Á0Š60ˆ40„30‡20‰50†90†70Š00ˆ40‰00…8 */
-    param->RefAmpThr =
-        50;      /* ref0…90‡9¡Á0Š60ˆ40„30‡20‰50†90†70Š00ˆ40‰00…8 */
-    param->StartFreq =
-        1000;        /* 0ˆ50ˆ70‡8¡À0†10†80†40‡40‡40Š80‡80†40‡40…80…90ˆ20…80‡20‡40…80‡00‡8 */
-    param->EndFreq =
-        4000;      /* 0ˆ50ˆ70‡8¡À0†10†80†40‡40‰00ˆ90‰00†10‡40…80…90ˆ20…80‡20‡40…80‡00‡8 */
+    RKAudioDelayParam *param = (RKAudioDelayParam *)calloc(1, sizeof(RKAudioDelayParam));
+    param->MaxFrame = 32;       /* delayÃ—Ã®Â³Â¤Â¹Ã€Â¼Ã†Ã–Â¡ÃŠÃ½ */
+    param->LeastDelay = 0;      /* delayÃ—Ã®Â¶ÃŒÂ¹Ã€Â¼Ã†Ã–Â¡ÃŠÃ½ */
+    param->JumpFrame = 12;      /* ÃŒÃ¸Â¹Ã½Ã–Â¡ÃŠÃ½ */
+    param->DelayOffset = 1;     /* delay offsetÃ–Â¡ÃŠÃ½ */
+    param->MicAmpThr = 50;      /* micÂ¶Ã‹Ã—Ã®ÃÂ¡Ã„ÃœÃÂ¿Ã£ÃÃ–Âµ */
+    param->RefAmpThr = 50;      /* refÂ¶Ã‹Ã—Ã®ÃÂ¡Ã„ÃœÃÂ¿Ã£ÃÃ–Âµ */
+    param->StartFreq = 1000;        /* Ã‘Ã“ÃŠÂ±Â¹Ã€Â¼Ã†Ã†Ã°ÃŠÂ¼Ã†ÂµÂ¶ÃŽÂµÃ„Ã†ÂµÃ‚ÃŠ */
+    param->EndFreq = 4000;      /* Ã‘Ã“ÃŠÂ±Â¹Ã€Â¼Ã†Ã–Ã•Ã–Â¹Ã†ÂµÂ¶ÃŽÂµÃ„Ã†ÂµÃ‚ÃŠ */
     param->SmoothFactor = 0.99f;
     return (void *)param;
 }
@@ -421,32 +405,27 @@ inline static void *rkaudio_anr_param_init_tx()
 inline static void *rkaudio_dereverb_param_init()
 {
     /*RKAudioDereverbParam* param = (RKAudioDereverbParam*)malloc(sizeof(RKAudioDereverbParam));*/
-    RKAudioDereverbParam *param = (RKAudioDereverbParam *)calloc(1,
-                                  sizeof(RKAudioDereverbParam));
-    param->rlsLg = 4;           /* RLS0‡00‡90…5¡§0‡4¡Â0†5¡Á0‡80‹5 */
-    param->curveLg = 30;        /* ¡¤0‰00…50†40‡5¨²0ˆ30‰80†5¡Á0‡80‹5 */
-    param->delay = 2;           /* RLS0‡00‡90…5¡§0‡4¡Â0ˆ50ˆ70‡8¡À */
-    param->forgetting =
-        0.98;   /* RLS0‡00‡90…5¡§0‡4¡Â0ˆ60‡30ˆ1¨¹0ˆ6¨°¡Á0ˆ7 */
+    RKAudioDereverbParam *param = (RKAudioDereverbParam *)calloc(1, sizeof(RKAudioDereverbParam));
+    param->rlsLg = 4;           /* RLSÃ‚Ã‹Â²Â¨Ã†Ã·Â½Ã—ÃŠÃ½ */
+    param->curveLg = 30;        /* Â·Ã–Â²Â¼Ã‡ÃºÃÃŸÂ½Ã—ÃŠÃ½ */
+    param->delay = 2;           /* RLSÃ‚Ã‹Â²Â¨Ã†Ã·Ã‘Ã“ÃŠÂ± */
+    param->forgetting = 0.98;   /* RLSÃ‚Ã‹Â²Â¨Ã†Ã·Ã’Ã…ÃÃ¼Ã’Ã²Ã—Ã“ */
     param->T60 =
-        0.3;//1.5;     /* 0†3¨¬0ˆ3¨¬0‡8¡À0†40Š10†10†80†40‡40‰00…80„5¡§0…80„60ˆ20†30„50†2s0„50„80„50…10ˆ80†50…7¨®0„50…10‡60„60†3¨¬0ˆ3¨¬0‡20‰50†90„70ˆ80†50‡50†70„50…10…80…00‡80‡50ˆ80†50‡60‰60ˆ6¡Á0†10‹50ˆ30‹40…60‹5 */
+        0.3;//1.5;     /* Â»Ã¬ÃÃ¬ÃŠÂ±Â¼Ã¤Â¹Ã€Â¼Ã†Ã–ÂµÂ£Â¨ÂµÂ¥ÃŽÂ»Â£ÂºsÂ£Â©Â£Â¬Ã”Â½Â´Ã³Â£Â¬ÃˆÂ¥Â»Ã¬ÃÃ¬Ã„ÃœÃÂ¦Ã”Â½Ã‡Â¿Â£Â¬ÂµÂ«ÃŠÃ‡Ã”Â½ÃˆÃÃ’Ã—Â¹Ã½ÃÃ»Â³Ã½ */
     param->coCoeff =
-        1;         /* 0†30„60ˆ3¨¤0†00‡70ˆ40ˆ80…8¡Â0ˆ90‹40ˆ30…80‡80‹50„50…1¡¤0†80‰00†10†10‹50ˆ30‹40…60‹50„50…10ˆ80†50…7¨®0‡20‰50†90„70ˆ80†50‡50†70„50…10†5¡§0ˆ6¨¦0‡60„30‰00…80„50†20.50…80†520‰00…30†40Š1 */
+        1;         /* Â»Â¥ÃÃ Â¸Ã‰ÃÃ”ÂµÃ·Ã•Ã»ÃÂµÃŠÃ½Â£Â¬Â·Ã€Ã–Â¹Â¹Ã½ÃÃ»Â³Ã½Â£Â¬Ã”Â½Â´Ã³Ã„ÃœÃÂ¦Ã”Â½Ã‡Â¿Â£Â¬Â½Â¨Ã’Ã©ÃˆÂ¡Ã–ÂµÂ£Âº0.5ÂµÂ½2Ã–Â®Â¼Ã¤ */
     return (void *)param;
 }
 /* Set the Sub-Para which used to initialize the AES*/
 inline static void *rkaudio_aes_param_init()
 {
     /*RKAudioAESParameter* param = (RKAudioAESParameter*)malloc(sizeof(RKAudioAESParameter));*/
-    RKAudioAESParameter *param = (RKAudioAESParameter *)calloc(1,
-                                 sizeof(RKAudioAESParameter));
-    //param->Beta_Up = 0.002f; /* 0‡70ˆ30‡70‹50‡90‰20…90‡6 -3588.0f to compatible old json*/
+    RKAudioAESParameter *param = (RKAudioAESParameter *)calloc(1, sizeof(RKAudioAESParameter));
+    //param->Beta_Up = 0.002f; /* Ã‰ÃÃ‰Ã½Ã‹Ã™Â¶Ãˆ -3588.0f to compatible old json*/
     param->Beta_Up = 0.001f;
-    param->Beta_Down = 0.001f; /* 0ˆ30‡00†50…80‡90‰20…90‡6 */
-    param->Beta_Up_Low =
-        0.001f; /* 0…80ˆ10‡40…80‡70ˆ30‡70‹50‡90‰20…90‡6 */
-    param->Beta_Down_Low =
-        0.001f; /* 0…80ˆ10‡40…80ˆ30‡00†50…80‡90‰20…90‡6 */
+    param->Beta_Down = 0.001f; /* ÃÃ‚Â½ÂµÃ‹Ã™Â¶Ãˆ */
+    param->Beta_Up_Low = 0.001f; /* ÂµÃÃ†ÂµÃ‰ÃÃ‰Ã½Ã‹Ã™Â¶Ãˆ */
+    param->Beta_Down_Low = 0.001f; /* ÂµÃÃ†ÂµÃÃ‚Â½ÂµÃ‹Ã™Â¶Ãˆ */
     param->low_freq = 1250;
     param->high_freq = 3750;
     param->THD_Flag = 1;    /* 1 open THD, 0 close THD */
@@ -476,7 +455,7 @@ inline static void *rkaudio_dtd_param_init()
     RKDTDParam *param = (RKDTDParam *)calloc(1, sizeof(RKDTDParam));
     /* dtd paremeters*/
     param->ksiThd_high =
-        0.60f;                                                 /* 0…80„60‡90…00†50…50‡30ˆ40†60‹20Š00ˆ40‰00…8 */
+        0.60f;                                                 /* ÂµÂ¥Ã‹Â«Â½Â²Ã…ÃÂ¾Ã¶Ã£ÃÃ–Âµ */
     param->ksiThd_low = 0.50f;
     return (void *)param;
 }
@@ -486,31 +465,31 @@ inline static void *rkaudio_agc_param_init()
     /*RKAGCParam* param = (RKAGCParam*)malloc(sizeof(RKAGCParam));*/
     RKAGCParam *param = (RKAGCParam *)calloc(1, sizeof(RKAGCParam));
 
-    param->attack_time = 400.0;     /* ´¥·¢Ê±¼ä£¬¼´AGCÔöÒæÉÏÉýËùÐèÒªµÄÊ±¼ä */
-    param->release_time = 200.0;    /* Ê©·ÅÊ±¼ä£¬¼´AGCÔöÒæÏÂ½µËùÐèÒªµÄÊ±¼ä */
-    //param->max_gain = 35.0;       /* ×î´óÔöÒæ£¬Í¬Ê±Ò²ÊÇÏßÐÔ¶ÎÔöÒæ£¬µ¥Î»£ºdB */
-    param->max_gain = 25;           /* ×î´óÔöÒæ£¬Í¬Ê±Ò²ÊÇÏßÐÔ¶ÎÔöÒæ£¬µ¥Î»£ºdB */
+    param->attack_time = 400.0;     /* è§¦å‘æ—¶é—´ï¼Œå³AGCå¢žç›Šä¸Šå‡æ‰€éœ€è¦çš„æ—¶é—´ */
+    param->release_time = 200.0;    /* æ–½æ”¾æ—¶é—´ï¼Œå³AGCå¢žç›Šä¸‹é™æ‰€éœ€è¦çš„æ—¶é—´ */
+    //param->max_gain = 35.0;       /* æœ€å¤§å¢žç›Šï¼ŒåŒæ—¶ä¹Ÿæ˜¯çº¿æ€§æ®µå¢žç›Šï¼Œå•ä½ï¼šdB */
+    param->max_gain = 25;           /* æœ€å¤§å¢žç›Šï¼ŒåŒæ—¶ä¹Ÿæ˜¯çº¿æ€§æ®µå¢žç›Šï¼Œå•ä½ï¼šdB */
     param->max_peak =
-        -1.0;         /* ¾­AGC´¦Àíºó£¬Êä³öÓïÒôµÄ×î´óÄÜÁ¿£¬·¶Î§£ºµ¥Î»£ºdB */
-    param->fRk0 = 2;                /* À©ÕÅ¶ÎÐ±ÂÊ */
+        -1.0;         /* ç»AGCå¤„ç†åŽï¼Œè¾“å‡ºè¯­éŸ³çš„æœ€å¤§èƒ½é‡ï¼ŒèŒƒå›´ï¼šå•ä½ï¼šdB */
+    param->fRk0 = 2;                /* æ‰©å¼ æ®µæ–œçŽ‡ */
     param->fRth2 =
-        -35;             /* Ñ¹Ëõ¶ÎÆðÊ¼ÄÜÁ¿dBãÐÖµ£¬Í¬Ê±Ò²ÊÇÏßÐÔ¶Î½áÊøãÐÖµ£¬ÔöÒæÖð½¥½µµÍ£¬×¢Òâ fRth2 + max_gain < max_peak */
+        -35;             /* åŽ‹ç¼©æ®µèµ·å§‹èƒ½é‡dBé˜ˆå€¼ï¼ŒåŒæ—¶ä¹Ÿæ˜¯çº¿æ€§æ®µç»“æŸé˜ˆå€¼ï¼Œå¢žç›Šé€æ¸é™ä½Žï¼Œæ³¨æ„ fRth2 + max_gain < max_peak */
     param->fRth1 =
-        -83;             /* À©ÕÅ¶Î½áÊøÄÜÁ¿dBãÐÖµ£¬Í¬Ê±Ò²ÊÇÏßÐÔ¶Î¿ªÊ¼ãÐÖµ£¬ÄÜÁ¿¸ßÓÚ¸ÄÇøÓòÒÔmax_gainÔöÒæ */
-    param->fRth0 = -85;             /* ÔëÉùÃÅãÐÖµ */
+        -83;             /* æ‰©å¼ æ®µç»“æŸèƒ½é‡dBé˜ˆå€¼ï¼ŒåŒæ—¶ä¹Ÿæ˜¯çº¿æ€§æ®µå¼€å§‹é˜ˆå€¼ï¼Œèƒ½é‡é«˜äºŽæ”¹åŒºåŸŸä»¥max_gainå¢žç›Š */
+    param->fRth0 = -85;             /* å™ªå£°é—¨é˜ˆå€¼ */
 
-    /* 0ˆ20‰70ˆ4¡ì0…50ˆ20‡80‹5 */
-    param->fs = 16000;                       /* Êý¾Ý²ÉÑùÂÊ */
-    param->frmlen = 256;                   /* ´¦ÀíÖ¡³¤ */
-    param->attenuate_time = 1000; /* ÔëÉùË¥¼õÊ±¼ä£¬¼´ÔëÉù¶ÎÔöÒæË¥¼õµ½1ËùÐèµÄÊ±¼ä */
-    param->fRk1 = 0.8;                       /* À©ÕÅ¶ÎÐ±ÂÊ */
-    param->fRk2 = 0.4;                       /* À©ÕÅ¶ÎÐ±ÂÊ */
+    /* ÃŽÃžÃÂ§Â²ÃŽÃŠÃ½ */
+    param->fs = 16000;                       /* æ•°æ®é‡‡æ ·çŽ‡ */
+    param->frmlen = 256;                   /* å¤„ç†å¸§é•¿ */
+    param->attenuate_time = 1000; /* å™ªå£°è¡°å‡æ—¶é—´ï¼Œå³å™ªå£°æ®µå¢žç›Šè¡°å‡åˆ°1æ‰€éœ€çš„æ—¶é—´ */
+    param->fRk1 = 0.8;                       /* æ‰©å¼ æ®µæ–œçŽ‡ */
+    param->fRk2 = 0.4;                       /* æ‰©å¼ æ®µæ–œçŽ‡ */
     param->fLineGainDb =
-        -25.0f;               /* µÍÓÚ¸ÃÖµ£¬ÆðÊ¼µÄattenuate_time(ms)ÄÚ²»×öÔöÒæ */
+        -25.0f;               /* ä½ŽäºŽè¯¥å€¼ï¼Œèµ·å§‹çš„attenuate_time(ms)å†…ä¸åšå¢žç›Š */
     param->swSmL0 =
         0;                    /* this misc flag is bitmap, bit0: more_grow_protect bit1: fast_update_gain*/
-    param->swSmL1 = 80;                    /* ÏßÐÔ¶ÎÊ±ÓòÆ½»¬µãÊý */
-    param->swSmL2 = 80;                    /* Ñ¹Ëõ¶ÎÊ±ÓòÆ½»¬µãÊý */
+    param->swSmL1 = 80;                    /* çº¿æ€§æ®µæ—¶åŸŸå¹³æ»‘ç‚¹æ•° */
+    param->swSmL2 = 80;                    /* åŽ‹ç¼©æ®µæ—¶åŸŸå¹³æ»‘ç‚¹æ•° */
 
     return (void *)param;
 }
@@ -521,13 +500,13 @@ inline static void *rkaudio_cng_param_init()
     RKCNGParam *param = (RKCNGParam *)calloc(1, sizeof(RKCNGParam));
     /* cng paremeters */
     param->fSmoothAlpha =
-        0.99f;                                                    /* INT16 Q15 0‡80„80†40ˆ70‡80Š30‡80‡80ˆ80Š50‡7¨´0‡40†50†30…10…90‡6 */
+        0.99f;                                                    /* INT16 Q15 ÃŠÂ©Â¼Ã“ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Ã†Â½Â»Â¬Â¶Ãˆ */
     param->fSpeechGain =
-        0;                                                     /* INT16 Q15 0‡80„80†40ˆ70‡80Š30‡80‡80ˆ80Š50‡7¨´0ˆ70Š70ˆ60‹00ˆ20‡40†8¨ª0‡20„50‡20‰90…60ˆ00…90‡6 */
+        0;                                                     /* INT16 Q15 ÃŠÂ©Â¼Ã“ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Ã“Ã¯Ã’Ã´ÃŽÃ†Ã€Ã­Ã„Â£Ã„Ã¢Â³ÃŒÂ¶Ãˆ */
     param->fGain =
-        10.0;                                           /* INT16 Q0 0‡80„80†40ˆ70‡80Š30‡80‡80ˆ80Š50‡7¨´¡¤¨´0…90‡6¡À0‡60†80‹5 */
+        10.0;                                           /* INT16 Q0 ÃŠÂ©Â¼Ã“ÃŠÃ¦ÃŠÃŠÃ”Ã«Ã‰Ã¹Â·Ã¹Â¶ÃˆÂ±ÃˆÃ€Ã½ */
     param->fMpy =
-        10;                                            /* INT16 Q0 ¡ã¡Á0ˆ80Š50‡90Š30†3¨²0‡80‹50‡7¨²0…60‡7¡¤¨´0…90‡6 */
+        10;                                            /* INT16 Q0 Â°Ã—Ã”Ã«Ã‹Ã¦Â»ÃºÃŠÃ½Ã‰ÃºÂ³Ã‰Â·Ã¹Â¶Ãˆ */
     return (void *)param;
 }
 /* Set the Sub-Para which used to initialize the EQ*/
@@ -569,8 +548,7 @@ inline static void *rkaudio_ainr_param_init()
 {
     RKAinrParam *param = (RKAinrParam *)calloc(1, sizeof(RKAinrParam));
     param->mode = 1;                // mode. 1, 2
-    param->datrs_optm =
-        1;          // optimization mode of data transfer, default 2.
+    param->datrs_optm = 1;          // optimization mode of data transfer, default 2.
     param->alpha1 = 0.6;            // smooth (speech ascend alpha)
     param->alpha2 = 0.80;           // smooth (speech descend alpha)
     param->mini_gain = 0.02;        // environment voice level. 0~1
@@ -649,41 +627,35 @@ inline static void *rkaudio_agc_param_init_rx()
 {
     RKAGCParam *param = (RKAGCParam *)malloc(sizeof(RKAGCParam));
 
-    /* 0ˆ40‡0¡ã0Š3AGC0…50ˆ20‡80‹5 */
+    /* ÃÃ‚Â°Ã¦AGCÂ²ÃŽÃŠÃ½ */
     param->attack_time =
-        200.0;     /* 0…70„6¡¤0„40‡8¡À0†40Š10„50…10†40…7AGC0ˆ80‹20ˆ60Š30‡70ˆ30‡70‹50‡9¨´0ˆ4¨¨0ˆ60„90…80‡20‡8¡À0†40Š1 */
+        200.0;     /* Â´Â¥Â·Â¢ÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´AGCÃ”Ã¶Ã’Ã¦Ã‰ÃÃ‰Ã½Ã‹Ã¹ÃÃ¨Ã’ÂªÂµÃ„ÃŠÂ±Â¼Ã¤ */
     param->release_time =
-        200.0;    /* 0‡80„8¡¤0‡30‡8¡À0†40Š10„50…10†40…7AGC0ˆ80‹20ˆ60Š30ˆ30‡00†50…80‡9¨´0ˆ4¨¨0ˆ60„90…80‡20‡8¡À0†40Š1 */
-    //param->max_gain = 35.0;       /* ¡Á0Š60…7¨®0ˆ80‹20ˆ60Š30„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20ˆ80‹20ˆ60Š30„50…10…80„60ˆ20†30„50†2dB */
+        200.0;    /* ÃŠÂ©Â·Ã…ÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´AGCÃ”Ã¶Ã’Ã¦ÃÃ‚Â½ÂµÃ‹Ã¹ÃÃ¨Ã’ÂªÂµÃ„ÃŠÂ±Â¼Ã¤ */
+    //param->max_gain = 35.0;       /* Ã—Ã®Â´Ã³Ã”Ã¶Ã’Ã¦Â£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÃ”Ã¶Ã’Ã¦Â£Â¬ÂµÂ¥ÃŽÂ»Â£ÂºdB */
     param->max_gain =
-        5.0;          /* ¡Á0Š60…7¨®0ˆ80‹20ˆ60Š30„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20ˆ80‹20ˆ60Š30„50…10…80„60ˆ20†30„50†2dB */
+        5.0;          /* Ã—Ã®Â´Ã³Ã”Ã¶Ã’Ã¦Â£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÃ”Ã¶Ã’Ã¦Â£Â¬ÂµÂ¥ÃŽÂ»Â£ÂºdB */
     param->max_peak =
-        -1;           /* 0†60…2AGC0…70„70†8¨ª0†2¨®0„50…10‡80Š10…60‹20ˆ70Š70ˆ60‹00…80‡2¡Á0Š60…7¨®0‡20‰50†90†70„50…1¡¤0…90ˆ2¡ì0„50†20…80„60ˆ20†30„50†2dB */
-    param->fRk0 = 2;                /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
+        -1;           /* Â¾Â­AGCÂ´Â¦Ã€Ã­ÂºÃ³Â£Â¬ÃŠÃ¤Â³Ã¶Ã“Ã¯Ã’Ã´ÂµÃ„Ã—Ã®Â´Ã³Ã„ÃœÃÂ¿Â£Â¬Â·Â¶ÃŽÂ§Â£ÂºÂµÂ¥ÃŽÂ»Â£ÂºdB */
+    param->fRk0 = 2;                /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
     param->fRth2 =
-        -25;             /* 0ˆ50†10‡90‹10…90ˆ20‡40Š80‡80†40‡20‰50†90†7dB0Š00ˆ40‰00…80„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20†5¨¢0‡80‹30Š00ˆ40‰00…80„50…10ˆ80‹20ˆ60Š30‰00Š80†50„60†50…80…80ˆ10„50…1¡Á0„40ˆ60‰9 fRth2 + max_gain < max_peak */
+        -25;             /* Ã‘Â¹Ã‹ÃµÂ¶ÃŽÃ†Ã°ÃŠÂ¼Ã„ÃœÃÂ¿dBÃ£ÃÃ–ÂµÂ£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÂ½Ã¡ÃŠÃ¸Ã£ÃÃ–ÂµÂ£Â¬Ã”Ã¶Ã’Ã¦Ã–Ã°Â½Â¥Â½ÂµÂµÃÂ£Â¬Ã—Â¢Ã’Ã¢ fRth2 + max_gain < max_peak */
     param->fRth1 =
-        -35;             /* 0†80„80ˆ90‡30…90ˆ20†5¨¢0‡80‹30‡20‰50†90†7dB0Š00ˆ40‰00…80„50…10ˆ10…10‡8¡À0ˆ60…50‡80‡50ˆ30‰80ˆ40ˆ80…90ˆ20†70„90‡80†40Š00ˆ40‰00…80„50…10‡20‰50†90†70†00‰80ˆ70‰30†00‡20‡50‹30ˆ7¨°0ˆ60ˆ8max_gain0ˆ80‹20ˆ60Š3 */
-    param->fRth0 = -45;             /* 0ˆ80Š50‡7¨´0‡10‡30Š00ˆ40‰00…8 */
+        -35;             /* Ã€Â©Ã•Ã…Â¶ÃŽÂ½Ã¡ÃŠÃ¸Ã„ÃœÃÂ¿dBÃ£ÃÃ–ÂµÂ£Â¬ÃÂ¬ÃŠÂ±Ã’Â²ÃŠÃ‡ÃÃŸÃÃ”Â¶ÃŽÂ¿ÂªÃŠÂ¼Ã£ÃÃ–ÂµÂ£Â¬Ã„ÃœÃÂ¿Â¸ÃŸÃ“ÃšÂ¸Ã„Ã‡Ã¸Ã“Ã²Ã’Ã”max_gainÃ”Ã¶Ã’Ã¦ */
+    param->fRth0 = -45;             /* Ã”Ã«Ã‰Ã¹ÃƒÃ…Ã£ÃÃ–Âµ */
 
-    /* 0ˆ20‰70ˆ4¡ì0…50ˆ20‡80‹5 */
-    param->fs =
-        16000;                       /* 0‡80‹50†60‰60…50‡70ˆ5¨´0‡00‡8 */
-    param->frmlen = 256;                   /* 0…70„70†8¨ª0‰00„30…6¡è */
+    /* ÃŽÃžÃÂ§Â²ÃŽÃŠÃ½ */
+    param->fs = 16000;                       /* ÃŠÃ½Â¾ÃÂ²Ã‰Ã‘Ã¹Ã‚ÃŠ */
+    param->frmlen = 256;                   /* Â´Â¦Ã€Ã­Ã–Â¡Â³Â¤ */
     param->attenuate_time =
-        1000; /* 0ˆ80Š50‡7¨´0‡90„60†40‹10‡8¡À0†40Š10„50…10†40…70ˆ80Š50‡7¨´0…90ˆ20ˆ80‹20ˆ60Š30‡90„60†40‹10…80†510‡9¨´0ˆ4¨¨0…80‡20‡8¡À0†40Š1 */
-    param->fRk1 =
-        0.8;                      /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
-    param->fRk2 =
-        0.4;                      /* 0†80„80ˆ90‡30…90ˆ20ˆ4¡À0‡00‡8 */
+        1000; /* Ã”Ã«Ã‰Ã¹Ã‹Â¥Â¼ÃµÃŠÂ±Â¼Ã¤Â£Â¬Â¼Â´Ã”Ã«Ã‰Ã¹Â¶ÃŽÃ”Ã¶Ã’Ã¦Ã‹Â¥Â¼ÃµÂµÂ½1Ã‹Ã¹ÃÃ¨ÂµÃ„ÃŠÂ±Â¼Ã¤ */
+    param->fRk1 = 0.8;                      /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
+    param->fRk2 = 0.4;                      /* Ã€Â©Ã•Ã…Â¶ÃŽÃÂ±Ã‚ÃŠ */
     param->fLineGainDb =
-        -25.0f;               /* 0…80ˆ10ˆ70‰30†00‡10‰00…80„50…10‡40Š80‡80†40…80‡2attenuate_time(ms)0‡20‰30…50†3¡Á0‹20ˆ80‹20ˆ60Š3 */
-    param->swSmL0 =
-        40;                    /* 0†80„80ˆ90‡30…90ˆ20‡8¡À0ˆ7¨°0‡40†50†30…10…80Š00‡80‹5 */
-    param->swSmL1 =
-        80;                    /* 0ˆ30‰80ˆ40ˆ80…90ˆ20‡8¡À0ˆ7¨°0‡40†50†30…10…80Š00‡80‹5 */
-    param->swSmL2 =
-        80;                    /* 0ˆ50†10‡90‹10…90ˆ20‡8¡À0ˆ7¨°0‡40†50†30…10…80Š00‡80‹5 */
+        -25.0f;               /* ÂµÃÃ“ÃšÂ¸ÃƒÃ–ÂµÂ£Â¬Ã†Ã°ÃŠÂ¼ÂµÃ„attenuate_time(ms)Ã„ÃšÂ²Â»Ã—Ã¶Ã”Ã¶Ã’Ã¦ */
+    param->swSmL0 = 40;                    /* Ã€Â©Ã•Ã…Â¶ÃŽÃŠÂ±Ã“Ã²Ã†Â½Â»Â¬ÂµÃ£ÃŠÃ½ */
+    param->swSmL1 = 80;                    /* ÃÃŸÃÃ”Â¶ÃŽÃŠÂ±Ã“Ã²Ã†Â½Â»Â¬ÂµÃ£ÃŠÃ½ */
+    param->swSmL2 = 80;                    /* Ã‘Â¹Ã‹ÃµÂ¶ÃŽÃŠÂ±Ã“Ã²Ã†Â½Â»Â¬ÂµÃ£ÃŠÃ½ */
 
     return (void *)param;
 }
@@ -709,10 +681,10 @@ inline static void *rkaudio_aec_param_init()
 inline static void *rkaudio_preprocess_param_init()
 {
     /*SKVPreprocessParam* param = (SKVPreprocessParam*)malloc(sizeof(SKVPreprocessParam));*/
-    SKVPreprocessParam *param = (SKVPreprocessParam *)calloc(1,
-                                sizeof(SKVPreprocessParam));
+    SKVPreprocessParam *param = (SKVPreprocessParam *)calloc(1, sizeof(SKVPreprocessParam));
     //param->model_bf_en = EN_Fastaec;
-    param->model_bf_en =  EN_Fix | EN_GSC | EN_Wakeup;
+    // param->model_bf_en = EN_AINR | EN_Agc |EN_Fastaec | EN_AES; //  | EN_Anr  | EN_Wakeup | EN_WIND | EN_Dereverberation | EN_HOWLING;
+    param->model_bf_en = EN_Wakeup;
     //param->model_bf_en = EN_Fastaec | EN_AES | EN_Dereverberation | EN_Agc;
     //param->model_bf_en = EN_Fix | EN_Agc | EN_AINR | EN_Dereverberation;
     //param->model_bf_en = EN_DOA | EN_Fix | EN_AINR | EN_Anr ;
@@ -817,10 +789,9 @@ inline static void rkaudio_param_deinit(void *param_)
         rkaudio_rx_param_destory(param->rx_param);
 }
 
-void *rkaudio_preprocess_init(int rate, int bits, int src_chan, int ref_chan,
-                              RKAUDIOParam *param);
-void *rkaudio_preprocess_init_by_conf(int rate, int bits, int src_chan,
-                                      int ref_chan, char *conf_path);
+void *rkaudio_preprocess_init(int rate, int bits, int src_chan, int ref_chan, RKAUDIOParam *param);
+void *rkaudio_preprocess_init_by_conf(int rate, int bits, int src_chan, int ref_chan,
+                                      char *conf_path);
 void rkaudio_param_printf(int src_chan, int ref_chan, RKAUDIOParam *param);
 int rkaudio_Doa_invoke(void *st_ptr);
 int rkaudio_Cir_Doa_invoke(void *st_ptr, int *ang_doa, int *pth_doa);
@@ -834,15 +805,13 @@ int rkaudio_param_set(void *st_ptr, void *param);
 
 void rkaudio_preprocess_destory(void *st_ptr);
 
-int rkaudio_preprocess_short(void *st_ptr, short *in, short *out, int in_size,
-                             int *wakeup_status);
+int rkaudio_preprocess_short(void *st_ptr, short *in, short *out, int in_size, int *wakeup_status);
 int rkaudio_rx_short(void *st_ptr, short *in, short *out);
 
 int rkaudio_mdf_dump(void *st_ptr, short *out);
 
 void rkaudio_asr_set_param(float min, float max, float keep);
-int rkaudio_rknn_path_set(char *asr_rknn_path_, char *kws_rknn_path_,
-                          char *dns_rknn_path_);
+int rkaudio_rknn_path_set(char *asr_rknn_path_, char *kws_rknn_path_, char *dns_rknn_path_);
 void rkaudio_param_deinit(void *param_);
 
 int rkaudio_extinfo_get(void *st_ptr, int type, void *info);
