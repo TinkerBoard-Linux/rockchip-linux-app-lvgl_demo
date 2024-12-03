@@ -41,7 +41,6 @@ void lv_port_disp_init(lv_coord_t hor_res, lv_coord_t ver_res, int rot)
 #if defined(LV_USE_SDL) && LV_USE_SDL
     LV_LOG_USER("LV_USE_SDL");
     disp = lv_sdl_window_create(hor_res, ver_res);
-    mouse = lv_sdl_mouse_create();
 #endif
 
 #if defined(LV_USE_RKADK) && LV_USE_RKADK
