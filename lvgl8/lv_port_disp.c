@@ -34,7 +34,7 @@ void lv_port_disp_init(lv_coord_t hor_res, lv_coord_t ver_res, int rot)
     }
 
 #if USE_DRM
-    drm_disp_drv_init(rot);
+    drm_disp_drv_init(hor_res, ver_res, rot);
 #endif
 
 #if USE_SDL_GPU
